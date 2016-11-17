@@ -24,6 +24,25 @@ extension String {
     }
 }
 
+extension Mirror {
+    
+    func toDictionary(withSuperClass: Bool = true) -> [String: Any] {
+    
+        var dict = [String: Any]()
+        
+        for attr in self.children {
+            if let propertyName = attr.label {
+                dict[propertyName] = attr.value
+            }
+        }
+        if let parent = self.superclassMirror {
+            for (propertyName, value) in parent.toDictionary() {
+                dict[propertyName] = value
+            }
+        }
+        return dict
+    }
+}
 
 extension UIImageView {
 

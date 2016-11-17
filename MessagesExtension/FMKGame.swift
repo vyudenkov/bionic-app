@@ -245,7 +245,7 @@ extension FMKGameRequest {
         items.append(URLQueryItem(name: "images", value: images.toJsonString()?.toBase64()))
         items.append(URLQueryItem(name: "respondents", value: respondents.toJsonString()?.toBase64()))
         
-        print(self.toJsonString())
+        print(self.toJsonString()!)
         return items
     }
     

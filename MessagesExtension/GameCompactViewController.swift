@@ -9,42 +9,126 @@
 import UIKit
 
 protocol GameCompactSendMessageDelegate {
-    func sendMessage(_ controller: GameCompactViewController, images: [GameImage])
+    func startGame(_ controller: GameCompactViewController, game: FMKGame)
 }
 
-class GameCompactViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class GameCompactViewCell : UITableViewCell {
     
-    var images: [GameImage] = []
-    var delegate: GameCompactSendMessageDelegate?
+    @IBOutlet weak var imageButton: CheckRadioButton!
+    @IBOutlet weak var imageText: UIButton!
+    @IBAction func textClick() {
+        imageButton.toggleButton()
+        imageButton.unselectAlternateButtons()
+    }
+
+    var question: Element? = nil {
+        didSet {
+            self.imageText.setTitle(question!.text, for: UIControlState.normal)
+            self.imageText.sizeToFit()
+        }
+    }
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        self.backgroundColor = UIColor.clear
+    }
     
-    @IBOutlet weak var collectionView: UICollectionView!
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        //super.setSelected(selected, animated: animated)
+    }
+}
+
+class GameCompactViewController: BaseQuestionViewController, UITableViewDataSource, UITableViewDelegate {
+    
+    private var reusableCells: [GameCompactViewCell] = []
+    
+    @IBOutlet weak var btnNext: UIButton!
+    
+    @IBOutlet weak var lblTitle: UILabel!
+    @IBOutlet weak var tableView: UITableView!
+    
+    var selection : [FMKGameItem]!
+    
+    var sendMessageDelegate: GameCompactSendMessageDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        collectionView.delegate = self
-        collectionView.dataSource = self
+        // prepare button
+        btnNext.layer.cornerRadius = 8
+        btnNext.layer.borderColor = UIColor.red.cgColor
+        btnNext.layer.masksToBounds = true
+        btnNext.setTitle(self.schema?.buttons[0].text, for: UIControlState.normal)
+        
+        // prepare header text
+        lblTitle.text = self.schema?.titles[0].text
         // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        // imitialize radiobutton feature (single image selection)
+        var buttons: [CheckRadioButton] = []
+        for i in 0..<(schema?.questions.count ?? 0) {
+            if let cell = tableView?.dequeueReusableCell(withIdentifier: "gameCompactViewCell", for: IndexPath(row: i, section: 0)) as? GameCompactViewCell {
+                cell.question = schema.questions[i]
+                let button = cell.imageButton
+                //button?.showImage(imageUrl: schema.questions[i].imageUrl)
+                buttons.append(button!)
+                reusableCells.append(cell)
+            }
+        }
+        
+        for button in buttons {
+            button.alternateButton = buttons
+        }
     }
     
     @IBAction func onClick(_ sender: AnyObject) {
+        super.next()
+    }
+    
+    override func doAction(context: ExecutionContext) {
+
+        sendMessageDelegate?.startGame(self, game: context as! FMKGame)
+    }
+    
+    override func validate () -> Bool {
+        return reusableCells.contains(where: { ( cell: GameCompactViewCell ) -> Bool in return cell.imageButton.isSelected })
+    }
+    
+    override func context () -> ExecutionContext {
+        if let cell = reusableCells.first(where: { ( cell: GameCompactViewCell ) -> Bool in return cell.imageButton.isSelected }) {
+            
+            let title = cell.question?.text
+            let result = FMKGame(userIdentifier: self.schema.userIdentifier, gameIdentifier: UUID(), title: title!, code: (cell.question?.code)!)
+            result.categories = self.selection;
+            return result
+        }
         
-        delegate?.sendMessage(self, images: images)
+        preconditionFailure("The method must be overriden")
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return images.count
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        self.tableView.reloadData()
     }
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.schema?.questions.count ?? 0
+    }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "firstCell", for: indexPath) as! GameCompactViewCell
-        self.images[indexPath.row].showInView(imageView: cell.imageView)
-        return cell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        return reusableCells[indexPath.row]
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
     }
 }

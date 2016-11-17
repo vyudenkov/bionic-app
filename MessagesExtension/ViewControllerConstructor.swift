@@ -42,9 +42,7 @@ class QuestionListSchema : Schema {
 
 
 
-protocol CustomViewControllerDelegate: class {
-    func doNextStep(_ response: ExecutionContext)
-}
+
 /*
 class CustomViewController : UIViewController {
 

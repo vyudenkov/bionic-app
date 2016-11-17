@@ -13,22 +13,35 @@
 		FE1848161DC7B54B00B6DAE2 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1848151DC7B54B00B6DAE2 /* MessagesViewController.swift */; };
 		FE1848191DC7B54B00B6DAE2 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FE1848171DC7B54B00B6DAE2 /* MainInterface.storyboard */; };
 		FE18481B1DC7B54B00B6DAE2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FE18481A1DC7B54B00B6DAE2 /* Assets.xcassets */; };
-		FE18482B1DC7B7B300B6DAE2 /* GameCompactViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1848271DC7B7B300B6DAE2 /* GameCompactViewCell.swift */; };
 		FE18482C1DC7B7B300B6DAE2 /* GameCompactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1848281DC7B7B300B6DAE2 /* GameCompactViewController.swift */; };
-		FE18482D1DC7B7B300B6DAE2 /* GameTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1848291DC7B7B300B6DAE2 /* GameTableViewCell.swift */; };
-		FE18482E1DC7B7B300B6DAE2 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE18482A1DC7B7B300B6DAE2 /* GameViewController.swift */; };
+		FE18482E1DC7B7B300B6DAE2 /* RespondGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE18482A1DC7B7B300B6DAE2 /* RespondGameViewController.swift */; };
 		FE1848341DC7B8FE00B6DAE2 /* RadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1848331DC7B8FE00B6DAE2 /* RadioButton.swift */; };
-		FE1848371DC7B91800B6DAE2 /* VerticalSingleSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1848361DC7B91800B6DAE2 /* VerticalSingleSelectionViewController.swift */; };
+		FE1848371DC7B91800B6DAE2 /* QuestionListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1848361DC7B91800B6DAE2 /* QuestionListViewController.swift */; };
 		FE1848391DC7B92B00B6DAE2 /* FMKButtons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FE1848381DC7B92B00B6DAE2 /* FMKButtons.xcassets */; };
 		FE18483B1DC7B95D00B6DAE2 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE18483A1DC7B95D00B6DAE2 /* Extensions.swift */; };
 		FE18483D1DC7B97700B6DAE2 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE18483C1DC7B97700B6DAE2 /* BaseViewController.swift */; };
-		FE18483F1DC7B9CA00B6DAE2 /* ServerContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE18483E1DC7B9CA00B6DAE2 /* ServerContext.swift */; };
+		FE18483F1DC7B9CA00B6DAE2 /* Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE18483E1DC7B9CA00B6DAE2 /* Schema.swift */; };
 		FE1848421DC7B9D700B6DAE2 /* Array+Serializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1848401DC7B9D700B6DAE2 /* Array+Serializable.swift */; };
 		FE1848431DC7B9D700B6DAE2 /* Serializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1848411DC7B9D700B6DAE2 /* Serializable.swift */; };
 		FE1848451DC7BA4A00B6DAE2 /* FMKGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1848441DC7BA4A00B6DAE2 /* FMKGame.swift */; };
 		FE1848471DC7BB8B00B6DAE2 /* ViewControllerConstructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1848461DC7BB8B00B6DAE2 /* ViewControllerConstructor.swift */; };
 		FE1848491DC7BBD600B6DAE2 /* FMKButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1848481DC7BBD600B6DAE2 /* FMKButton.swift */; };
 		FE18484B1DC7BC2E00B6DAE2 /* UrlSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE18484A1DC7BC2E00B6DAE2 /* UrlSettings.swift */; };
+		FE18484D1DC7C16500B6DAE2 /* ModelBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE18484C1DC7C16500B6DAE2 /* ModelBuilder.swift */; };
+		FE18484F1DC8A77000B6DAE2 /* QuestionCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE18484E1DC8A77000B6DAE2 /* QuestionCollectionViewController.swift */; };
+		FE1848511DC8B7FD00B6DAE2 /* BaseQuestionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1848501DC8B7FD00B6DAE2 /* BaseQuestionViewController.swift */; };
+		FE1D1C7D1DD5E3D0009D979F /* SelectProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1D1C7C1DD5E3D0009D979F /* SelectProductViewController.swift */; };
+		FE1D1C7F1DD61759009D979F /* MiddleInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1D1C7E1DD61759009D979F /* MiddleInfoViewController.swift */; };
+		FE1D1C811DD76F6B009D979F /* TwoQuestionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1D1C801DD76F6B009D979F /* TwoQuestionsViewController.swift */; };
+		FE1D1C831DD77BC5009D979F /* GameResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1D1C821DD77BC5009D979F /* GameResultViewController.swift */; };
+		FE2061E81DDCB3FA00009047 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE2061E71DDCB3FA00009047 /* Settings.swift */; };
+		FE2061EA1DDDBF1A00009047 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE2061E91DDDBF1A00009047 /* History.swift */; };
+		FE6E1CC01DCA2A7F00B55EBB /* ThreeQuestionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6E1CBF1DCA2A7F00B55EBB /* ThreeQuestionViewController.swift */; };
+		FE6E1CC21DCA3ADC00B55EBB /* StaticImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6E1CC11DCA3ADC00B55EBB /* StaticImageViewController.swift */; };
+		FE6E1CC61DD2205700B55EBB /* StaticImageYesNoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6E1CC51DD2205700B55EBB /* StaticImageYesNoViewController.swift */; };
+		FE946CDC1DDB69D4002C8705 /* MainPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE946CDB1DDB69D4002C8705 /* MainPageViewController.swift */; };
+		FEFCBE601DD5C1F1002D290C /* Categories.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEFCBE5F1DD5C1F1002D290C /* Categories.swift */; };
+		FEFCBE621DD5C30D002D290C /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEFCBE611DD5C30D002D290C /* Result.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,22 +78,35 @@
 		FE1848181DC7B54B00B6DAE2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		FE18481A1DC7B54B00B6DAE2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FE18481C1DC7B54B00B6DAE2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FE1848271DC7B7B300B6DAE2 /* GameCompactViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameCompactViewCell.swift; sourceTree = "<group>"; };
 		FE1848281DC7B7B300B6DAE2 /* GameCompactViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameCompactViewController.swift; sourceTree = "<group>"; };
-		FE1848291DC7B7B300B6DAE2 /* GameTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameTableViewCell.swift; sourceTree = "<group>"; };
-		FE18482A1DC7B7B300B6DAE2 /* GameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		FE18482A1DC7B7B300B6DAE2 /* RespondGameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RespondGameViewController.swift; sourceTree = "<group>"; };
 		FE1848331DC7B8FE00B6DAE2 /* RadioButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadioButton.swift; sourceTree = "<group>"; };
-		FE1848361DC7B91800B6DAE2 /* VerticalSingleSelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerticalSingleSelectionViewController.swift; sourceTree = "<group>"; };
+		FE1848361DC7B91800B6DAE2 /* QuestionListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuestionListViewController.swift; sourceTree = "<group>"; };
 		FE1848381DC7B92B00B6DAE2 /* FMKButtons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = FMKButtons.xcassets; sourceTree = "<group>"; };
 		FE18483A1DC7B95D00B6DAE2 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		FE18483C1DC7B97700B6DAE2 /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
-		FE18483E1DC7B9CA00B6DAE2 /* ServerContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerContext.swift; sourceTree = "<group>"; };
+		FE18483E1DC7B9CA00B6DAE2 /* Schema.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Schema.swift; sourceTree = "<group>"; };
 		FE1848401DC7B9D700B6DAE2 /* Array+Serializable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Serializable.swift"; sourceTree = "<group>"; };
 		FE1848411DC7B9D700B6DAE2 /* Serializable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Serializable.swift; sourceTree = "<group>"; };
 		FE1848441DC7BA4A00B6DAE2 /* FMKGame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMKGame.swift; sourceTree = "<group>"; };
 		FE1848461DC7BB8B00B6DAE2 /* ViewControllerConstructor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerConstructor.swift; sourceTree = "<group>"; };
 		FE1848481DC7BBD600B6DAE2 /* FMKButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMKButton.swift; sourceTree = "<group>"; };
 		FE18484A1DC7BC2E00B6DAE2 /* UrlSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UrlSettings.swift; sourceTree = "<group>"; };
+		FE18484C1DC7C16500B6DAE2 /* ModelBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelBuilder.swift; sourceTree = "<group>"; };
+		FE18484E1DC8A77000B6DAE2 /* QuestionCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuestionCollectionViewController.swift; sourceTree = "<group>"; };
+		FE1848501DC8B7FD00B6DAE2 /* BaseQuestionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseQuestionViewController.swift; sourceTree = "<group>"; };
+		FE1D1C7C1DD5E3D0009D979F /* SelectProductViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectProductViewController.swift; sourceTree = "<group>"; };
+		FE1D1C7E1DD61759009D979F /* MiddleInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MiddleInfoViewController.swift; sourceTree = "<group>"; };
+		FE1D1C801DD76F6B009D979F /* TwoQuestionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwoQuestionsViewController.swift; sourceTree = "<group>"; };
+		FE1D1C821DD77BC5009D979F /* GameResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameResultViewController.swift; sourceTree = "<group>"; };
+		FE2061E71DDCB3FA00009047 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		FE2061E91DDDBF1A00009047 /* History.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = History.swift; sourceTree = "<group>"; };
+		FE6E1CBF1DCA2A7F00B55EBB /* ThreeQuestionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreeQuestionViewController.swift; sourceTree = "<group>"; };
+		FE6E1CC11DCA3ADC00B55EBB /* StaticImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaticImageViewController.swift; sourceTree = "<group>"; };
+		FE6E1CC51DD2205700B55EBB /* StaticImageYesNoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaticImageYesNoViewController.swift; sourceTree = "<group>"; };
+		FE946CDB1DDB69D4002C8705 /* MainPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainPageViewController.swift; sourceTree = "<group>"; };
+		FEFCBE5F1DD5C1F1002D290C /* Categories.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Categories.swift; sourceTree = "<group>"; };
+		FEFCBE611DD5C30D002D290C /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,9 +161,9 @@
 			isa = PBXGroup;
 			children = (
 				FE1848351DC7B90400B6DAE2 /* Controllers */,
+				FE1848261DC7B76B00B6DAE2 /* Game */,
 				FE1848321DC7B8F000B6DAE2 /* Controls */,
 				FE1848311DC7B8DB00B6DAE2 /* Models */,
-				FE1848261DC7B76B00B6DAE2 /* Game */,
 				FE1848151DC7B54B00B6DAE2 /* MessagesViewController.swift */,
 				FE1848171DC7B54B00B6DAE2 /* MainInterface.storyboard */,
 				FE18481A1DC7B54B00B6DAE2 /* Assets.xcassets */,
@@ -150,10 +176,8 @@
 		FE1848261DC7B76B00B6DAE2 /* Game */ = {
 			isa = PBXGroup;
 			children = (
-				FE1848271DC7B7B300B6DAE2 /* GameCompactViewCell.swift */,
 				FE1848281DC7B7B300B6DAE2 /* GameCompactViewController.swift */,
-				FE1848291DC7B7B300B6DAE2 /* GameTableViewCell.swift */,
-				FE18482A1DC7B7B300B6DAE2 /* GameViewController.swift */,
+				FE18482A1DC7B7B300B6DAE2 /* RespondGameViewController.swift */,
 			);
 			name = Game;
 			sourceTree = "<group>";
@@ -164,9 +188,14 @@
 				FE1848441DC7BA4A00B6DAE2 /* FMKGame.swift */,
 				FE1848401DC7B9D700B6DAE2 /* Array+Serializable.swift */,
 				FE1848411DC7B9D700B6DAE2 /* Serializable.swift */,
-				FE18483E1DC7B9CA00B6DAE2 /* ServerContext.swift */,
+				FEFCBE5F1DD5C1F1002D290C /* Categories.swift */,
+				FEFCBE611DD5C30D002D290C /* Result.swift */,
+				FE18483E1DC7B9CA00B6DAE2 /* Schema.swift */,
+				FE2061E91DDDBF1A00009047 /* History.swift */,
 				FE18483A1DC7B95D00B6DAE2 /* Extensions.swift */,
 				FE18484A1DC7BC2E00B6DAE2 /* UrlSettings.swift */,
+				FE18484C1DC7C16500B6DAE2 /* ModelBuilder.swift */,
+				FE2061E71DDCB3FA00009047 /* Settings.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -185,7 +214,17 @@
 			children = (
 				FE1848461DC7BB8B00B6DAE2 /* ViewControllerConstructor.swift */,
 				FE18483C1DC7B97700B6DAE2 /* BaseViewController.swift */,
-				FE1848361DC7B91800B6DAE2 /* VerticalSingleSelectionViewController.swift */,
+				FE1848501DC8B7FD00B6DAE2 /* BaseQuestionViewController.swift */,
+				FE1848361DC7B91800B6DAE2 /* QuestionListViewController.swift */,
+				FE18484E1DC8A77000B6DAE2 /* QuestionCollectionViewController.swift */,
+				FE6E1CBF1DCA2A7F00B55EBB /* ThreeQuestionViewController.swift */,
+				FE6E1CC11DCA3ADC00B55EBB /* StaticImageViewController.swift */,
+				FE6E1CC51DD2205700B55EBB /* StaticImageYesNoViewController.swift */,
+				FE1D1C7C1DD5E3D0009D979F /* SelectProductViewController.swift */,
+				FE1D1C7E1DD61759009D979F /* MiddleInfoViewController.swift */,
+				FE1D1C801DD76F6B009D979F /* TwoQuestionsViewController.swift */,
+				FE1D1C821DD77BC5009D979F /* GameResultViewController.swift */,
+				FE946CDB1DDB69D4002C8705 /* MainPageViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -294,21 +333,34 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE2061E81DDCB3FA00009047 /* Settings.swift in Sources */,
 				FE18484B1DC7BC2E00B6DAE2 /* UrlSettings.swift in Sources */,
 				FE1848431DC7B9D700B6DAE2 /* Serializable.swift in Sources */,
-				FE18483F1DC7B9CA00B6DAE2 /* ServerContext.swift in Sources */,
-				FE18482E1DC7B7B300B6DAE2 /* GameViewController.swift in Sources */,
+				FE1D1C811DD76F6B009D979F /* TwoQuestionsViewController.swift in Sources */,
+				FE1D1C7D1DD5E3D0009D979F /* SelectProductViewController.swift in Sources */,
+				FE18483F1DC7B9CA00B6DAE2 /* Schema.swift in Sources */,
+				FE18482E1DC7B7B300B6DAE2 /* RespondGameViewController.swift in Sources */,
 				FE18482C1DC7B7B300B6DAE2 /* GameCompactViewController.swift in Sources */,
-				FE1848371DC7B91800B6DAE2 /* VerticalSingleSelectionViewController.swift in Sources */,
+				FE1848371DC7B91800B6DAE2 /* QuestionListViewController.swift in Sources */,
+				FE946CDC1DDB69D4002C8705 /* MainPageViewController.swift in Sources */,
+				FEFCBE621DD5C30D002D290C /* Result.swift in Sources */,
 				FE18483B1DC7B95D00B6DAE2 /* Extensions.swift in Sources */,
-				FE18482B1DC7B7B300B6DAE2 /* GameCompactViewCell.swift in Sources */,
+				FE1D1C7F1DD61759009D979F /* MiddleInfoViewController.swift in Sources */,
 				FE18483D1DC7B97700B6DAE2 /* BaseViewController.swift in Sources */,
 				FE1848341DC7B8FE00B6DAE2 /* RadioButton.swift in Sources */,
+				FE18484F1DC8A77000B6DAE2 /* QuestionCollectionViewController.swift in Sources */,
 				FE1848161DC7B54B00B6DAE2 /* MessagesViewController.swift in Sources */,
+				FE1848511DC8B7FD00B6DAE2 /* BaseQuestionViewController.swift in Sources */,
+				FE6E1CC61DD2205700B55EBB /* StaticImageYesNoViewController.swift in Sources */,
 				FE1848421DC7B9D700B6DAE2 /* Array+Serializable.swift in Sources */,
 				FE1848471DC7BB8B00B6DAE2 /* ViewControllerConstructor.swift in Sources */,
+				FE18484D1DC7C16500B6DAE2 /* ModelBuilder.swift in Sources */,
+				FEFCBE601DD5C1F1002D290C /* Categories.swift in Sources */,
+				FE2061EA1DDDBF1A00009047 /* History.swift in Sources */,
 				FE1848451DC7BA4A00B6DAE2 /* FMKGame.swift in Sources */,
-				FE18482D1DC7B7B300B6DAE2 /* GameTableViewCell.swift in Sources */,
+				FE6E1CC01DCA2A7F00B55EBB /* ThreeQuestionViewController.swift in Sources */,
+				FE1D1C831DD77BC5009D979F /* GameResultViewController.swift in Sources */,
+				FE6E1CC21DCA3ADC00B55EBB /* StaticImageViewController.swift in Sources */,
 				FE1848491DC7BBD600B6DAE2 /* FMKButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -501,6 +553,7 @@
 				FE1848211DC7B54B00B6DAE2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		FE1848231DC7B54B00B6DAE2 /* Build configuration list for PBXNativeTarget "bionic-app" */ = {
 			isa = XCConfigurationList;
@@ -509,6 +562,7 @@
 				FE1848251DC7B54B00B6DAE2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

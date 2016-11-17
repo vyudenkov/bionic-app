@@ -8,9 +8,6 @@
 
 import UIKit
 
-
-
-
 class ImageButtonTableViewCell : UITableViewCell {
     
     @IBOutlet weak var imageButton: RadioButton!
@@ -60,7 +57,7 @@ class TextTableViewCell : UITableViewCell {
     }
 }
 
-class VerticalSingleSelectionViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource {
+class QuestionListViewController: BaseQuestionViewController, UITableViewDelegate, UITableViewDataSource {
 
     private var reusableCells: [ImageButtonTableViewCell] = []
     
@@ -69,30 +66,18 @@ class VerticalSingleSelectionViewController: BaseViewController, UITableViewDele
 
     @IBOutlet weak var btnNext: UIButton!
     @IBAction func btnNextClick() {
-        if (self.validate()) {
-            delegate?.doNextStep(self.context())
-        }
-        else
-        {
-            super.showWarning()
-            // show warning to select anything
-        }
+
+        super.next()
     }
     
-    var schema: Questions!
-    
-    var delegate: CustomViewControllerDelegate?
-    
-    func validate () -> Bool {
+    override func validate () -> Bool {
         return reusableCells.contains(where: { ( cell: ImageButtonTableViewCell ) -> Bool in return cell.imageButton.isSelected })
-        
-        //preconditionFailure("The method must be overriden")
     }
     
-    func context () -> ExecutionContext {
+    override func context () -> ExecutionContext {
         if let cell = reusableCells.first(where: { ( cell: ImageButtonTableViewCell ) -> Bool in return cell.imageButton.isSelected }) {
         
-            return Result(userIdentifier: schema.userIdentifier, selectionCode: cell.code!)
+            return Result(userIdentifier: schema.userIdentifier, code: self.schema.code, selectionCode: cell.code!)
         }
         
         preconditionFailure("The method must be overriden")
@@ -105,22 +90,22 @@ class VerticalSingleSelectionViewController: BaseViewController, UITableViewDele
         btnNext.layer.cornerRadius = 8
         btnNext.layer.borderColor = UIColor.red.cgColor
         btnNext.layer.masksToBounds = true
-        btnNext.setTitle(self.schema.buttonText, for: UIControlState.normal)
+        btnNext.setTitle(self.schema.buttons[0].text, for: UIControlState.normal)
         
         // prepare header text
-        lblTitle.text = self.schema.title
+        lblTitle.text = self.schema.titles[0].text
         // Do any additional setup after loading the view.
         
         tableView.delegate = self
         tableView.dataSource = self
         
-        // imitialize radiobutton feature (single image selection)
+        // initialize radiobutton feature (single image selection)
         var buttons: [RadioButton] = []
         for i in 0..<schema.questions.count {
             if let cell = tableView?.dequeueReusableCell(withIdentifier: "Image Button Cell", for: IndexPath(row: 2 * i, section: 0)) as? ImageButtonTableViewCell {
                 cell.code = schema.questions[i].code
                 let button = cell.imageButton
-                button?.showImage(imageUrl: schema.questions[i].imageUrl)
+                button?.showImage(imageUrl: schema.questions[i].imageUrl!)
                 buttons.append(button!)
                 reusableCells.append(cell)
             }
@@ -136,12 +121,7 @@ class VerticalSingleSelectionViewController: BaseViewController, UITableViewDele
 
         self.tableView.reloadData()
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-        
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 2 * self.schema.questions.count
     }
@@ -154,11 +134,9 @@ class VerticalSingleSelectionViewController: BaseViewController, UITableViewDele
         var cell : UITableViewCell
         if indexPath.row % 2 > 0 {
             cell = tableView.dequeueReusableCell(withIdentifier: "Text Cell", for: indexPath)
-            (cell as! TextTableViewCell).labelText = question.imageText
+            (cell as! TextTableViewCell).labelText = question.text
         }
         else {
-            //cell = tableView.dequeueReusableCell(withIdentifier: "Image Button Cell", for: indexPath)
-            //(cell as! ImageButtonTableViewCell).imageUrl = question.imageUrl
             cell = reusableCells[index]
         }
         
@@ -170,6 +148,6 @@ class VerticalSingleSelectionViewController: BaseViewController, UITableViewDele
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
+        return 50
     }
 }

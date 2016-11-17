@@ -8,7 +8,7 @@ import Foundation
 
 extension Array where Element: Serializable {
     
-    public func toNSDictionaryArray() -> [NSDictionary] {
+    func toNSDictionaryArray() -> [NSDictionary] {
         var subArray = [NSDictionary]()
         for item in self {
             subArray.append(item.toDictionary())
@@ -21,7 +21,7 @@ extension Array where Element: Serializable {
     
     :returns: The array as JSON, wrapped in NSData.
     */
-    public func toJson(prettyPrinted: Bool = false) -> Data? {
+    func toJson(prettyPrinted: Bool = false) -> Data? {
         let subArray = self.toNSDictionaryArray()
         
         if JSONSerialization.isValidJSONObject(subArray) {
@@ -41,7 +41,7 @@ extension Array where Element: Serializable {
     
     :returns: The array as a JSON string.
     */
-    public func toJsonString(prettyPrinted: Bool = false) -> String? {
+    func toJsonString(prettyPrinted: Bool = false) -> String? {
         if let jsonData = toJson(prettyPrinted: prettyPrinted) {
             return String(data: jsonData, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))
         }

@@ -13,6 +13,8 @@ Supported objects:
 
 import Foundation
 
+
+
 public class Serializable: NSObject {
 
     public func formatKey(key: String) -> String {
@@ -37,8 +39,9 @@ public class Serializable: NSObject {
         let propertiesDictionary = NSMutableDictionary()
         let mirror = Mirror(reflecting: self)
         
-        for (propName, propValue) in mirror.children {
-            if let propValue: Any = self.unwrap(any: propValue), let propName = propName {
+        let properties = mirror.toDictionary(withSuperClass: false)
+        for (propName, propValue) in properties {
+            if let propValue: Any = self.unwrap(any: propValue) {
                 if let serializablePropValue = propValue as? Serializable {
                     setValue(dictionary: propertiesDictionary, value: serializablePropValue.toDictionary(), forKey: propName)
                 } else if let arrayPropValue = propValue as? [Serializable] {
@@ -57,23 +60,23 @@ public class Serializable: NSObject {
                     setValue(dictionary: propertiesDictionary, value: propValue as Any?, forKey: propName)
                 }
             } else if let propValue: Int8 = propValue as? Int8 {
-                setValue(dictionary: propertiesDictionary, value: propValue as Any?, forKey: propName!)
+                setValue(dictionary: propertiesDictionary, value: propValue as Any?, forKey: propName)
             } else if let propValue: Int16 = propValue as? Int16 {
-                setValue(dictionary: propertiesDictionary, value: propValue as Any?, forKey: propName!)
+                setValue(dictionary: propertiesDictionary, value: propValue as Any?, forKey: propName)
             } else if let propValue: Int32 = propValue as? Int32 {
-                setValue(dictionary: propertiesDictionary, value: propValue as Any?, forKey: propName!)
+                setValue(dictionary: propertiesDictionary, value: propValue as Any?, forKey: propName)
             } else if let propValue: Int64 = propValue as? Int64 {
-                setValue(dictionary: propertiesDictionary, value: propValue as Any?, forKey: propName!)
+                setValue(dictionary: propertiesDictionary, value: propValue as Any?, forKey: propName)
             } else if let propValue: UInt8 = propValue as? UInt8 {
-                setValue(dictionary: propertiesDictionary, value: propValue as Any?, forKey: propName!)
+                setValue(dictionary: propertiesDictionary, value: propValue as Any?, forKey: propName)
             } else if let propValue: UInt16 = propValue as? UInt16 {
-                setValue(dictionary: propertiesDictionary, value: propValue as Any?, forKey: propName!)
+                setValue(dictionary: propertiesDictionary, value: propValue as Any?, forKey: propName)
             } else if let propValue: UInt32 = propValue as? UInt32 {
-                setValue(dictionary: propertiesDictionary, value: propValue as Any?, forKey: propName!)
+                setValue(dictionary: propertiesDictionary, value: propValue as Any?, forKey: propName)
             } else if let propValue: UInt64 = propValue as? UInt64 {
-                setValue(dictionary: propertiesDictionary, value: propValue as Any?, forKey: propName!)
+                setValue(dictionary: propertiesDictionary, value: propValue as Any?, forKey: propName)
             } else if isEnum(any: propValue) {
-                setValue(dictionary: propertiesDictionary, value: "\(propValue)" as Any?, forKey: propName!)
+                setValue(dictionary: propertiesDictionary, value: "\(propValue)" as Any?, forKey: propName)
             }
         }
 
