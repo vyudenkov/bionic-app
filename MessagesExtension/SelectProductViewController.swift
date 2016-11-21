@@ -58,15 +58,23 @@ class SelectProductTableViewCell : UITableViewCell {
     }
 }
 
-class SelectProductViewController: BaseQuestionViewController, UITableViewDelegate, UITableViewDataSource {
+class SelectProductViewController: BaseQuestionViewController, ButtonClickDelegate, UITableViewDelegate, UITableViewDataSource {
 
     private var reusableCells: [SelectProductTableViewCell] = []
     
     @IBOutlet weak var lblTitle: UILabel!
-    @IBOutlet weak var btnNext: UIButton!
     @IBOutlet weak var tableView: UITableView!
     
-    @IBAction func onClick() {
+    override func validate () -> Bool {
+        return reusableCells.filter({ (cell: SelectProductTableViewCell) -> Bool in
+            if cell.result() != nil {
+                return true
+            }
+            return false
+        }).count > 0
+    }
+    
+    override func context () -> ExecutionContext {
         let result: FMKGame = FMKGame(userIdentifier: self.schema.userIdentifier, gameIdentifier: UUID(), title: nil, code: self.schema.code)
         
         for cell in reusableCells {
@@ -74,7 +82,12 @@ class SelectProductViewController: BaseQuestionViewController, UITableViewDelega
                 result.categories.append(s)
             }
         }
-        self.delegate?.doNextStep(result)
+        return result
+    }
+    
+    func onClick(code: String?) {
+        
+        super.next()
     }
 
     override func viewDidLoad() {
@@ -82,10 +95,6 @@ class SelectProductViewController: BaseQuestionViewController, UITableViewDelega
         
         lblTitle.text = self.schema.titles[0].text
         lblTitle.sizeToFit()
-        
-        btnNext.layer.cornerRadius = 8
-        btnNext.layer.masksToBounds = true
-        btnNext.setTitle(self.schema.buttons[0].text, for: UIControlState.normal)
 
         tableView.delegate = self
         tableView.dataSource = self
@@ -96,20 +105,29 @@ class SelectProductViewController: BaseQuestionViewController, UITableViewDelega
                 reusableCells.append(cell)
             }
         }
-
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.schema.fmks.count
+        return self.schema.fmks.count + 1
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let index = indexPath.row
+        if index == self.schema.fmks.count {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "Button Cell", for: indexPath)
+            (cell as! ButtonTableViewCell).buttonTitle = self.schema.buttons[0].text
+            (cell as! ButtonTableViewCell).delegate = self
+            return cell
+        }
         return reusableCells[indexPath.row]
     }
-
+    
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
+    }
 }

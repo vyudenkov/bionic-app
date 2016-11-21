@@ -89,7 +89,7 @@ class Section {
     }
 }
 
-class GameResultViewController: BaseQuestionViewController, ButtonCellDelegate, UITableViewDelegate, UITableViewDataSource {
+class GameResultViewController: BaseSelectionQuestionViewController, ButtonCellDelegate, UITableViewDelegate, UITableViewDataSource {
 
     var sections : [Section] = []
     
@@ -104,6 +104,7 @@ class GameResultViewController: BaseQuestionViewController, ButtonCellDelegate, 
         super.viewDidLoad()
 
         sections = []
+        
         var currentSection : Section? = nil
         for item in self.schema.titles {
             if let text = item.text {

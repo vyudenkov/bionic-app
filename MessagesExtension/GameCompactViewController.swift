@@ -39,7 +39,7 @@ class GameCompactViewCell : UITableViewCell {
     }
 }
 
-class GameCompactViewController: BaseQuestionViewController, UITableViewDataSource, UITableViewDelegate {
+class GameCompactViewController: BaseSelectionQuestionViewController, UITableViewDataSource, UITableViewDelegate {
     
     private var reusableCells: [GameCompactViewCell] = []
     
@@ -47,8 +47,6 @@ class GameCompactViewController: BaseQuestionViewController, UITableViewDataSour
     
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var tableView: UITableView!
-    
-    var selection : [FMKGameItem]!
     
     var sendMessageDelegate: GameCompactSendMessageDelegate?
     

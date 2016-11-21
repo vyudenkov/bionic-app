@@ -69,7 +69,7 @@ class FMKGame : Categories, ExecutionContext {
     
     var gameIdentifier : UUID
     
-    var respondents : [UUID] = []
+    var respondents : [String] = []
     
     var title : String?
 
@@ -103,7 +103,7 @@ extension FMKGame {
         items.append(URLQueryItem(name: "code", value: code))
         items.append(URLQueryItem(name: "categories", value: categories.toJsonString()?.toBase64()))
         
-        print(self.toJsonString()!)
+        //print(self.toJsonString()!)
         return items
     }
     
@@ -155,9 +155,45 @@ extension FMKGame {
 extension FMKGame {
     // MARK: Computed properties
     
+    
     func render() -> UIImage {
         
-        return #imageLiteral(resourceName: "MessageImage")
+        let view = UIView()
+        view.layer.frame = CGRect(x: 0, y: 0, width: 500, height: 500)
+        
+        var images = self.getMarryKill()
+        var frame : CGRect
+        var imageView : UIImageView
+        
+        if images.count > 0 {
+            frame = CGRect(x: 0, y: 0, width: 250, height: 250)
+            imageView = UIImageView(frame: frame)
+            imageView.showImage(imageUrl: images[0].imageUrl, sync: true)
+            view.addSubview(imageView)
+        }
+        
+        if images.count > 1 {
+            frame = CGRect(x: 250, y: 0, width: 250, height: 250)
+            imageView = UIImageView(frame: frame)
+            imageView.showImage(imageUrl: images[1].imageUrl, sync: true)
+            view.addSubview(imageView)
+        }
+        
+        if images.count > 2 {
+            frame = CGRect(x: 0, y: 250, width: 250, height: 250)
+            imageView = UIImageView(frame: frame)
+            imageView.showImage(imageUrl: images[2].imageUrl, sync: true)
+            view.addSubview(imageView)
+        }
+        
+        if images.count > 3 {
+            frame = CGRect(x: 250, y: 250, width: 250, height: 250)
+            imageView = UIImageView(frame: frame)
+            imageView.showImage(imageUrl: images[3].imageUrl, sync: true)
+            view.addSubview(imageView)
+        }
+        
+        return UIImage(view: view)
     }
 }
 

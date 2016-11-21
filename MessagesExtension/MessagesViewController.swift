@@ -116,6 +116,7 @@ class MessagesViewController: MSMessagesAppViewController {
         
         if let exist = game {
             exist.userIdentifier = conversation.localParticipantIdentifier
+            exist.respondents = conversation.remoteParticipantIdentifiers.map { $0.uuidString }
             sendStartGame(game: exist)
         }
     }
@@ -166,8 +167,8 @@ extension MessagesViewController : CustomViewControllerDelegate {
                 controller = storyboard.instantiateViewController(withIdentifier: "staticCollectionView")
             } else if model.type == Categories.QuestionButtons && model.questions.count == 3 {
                 controller = storyboard.instantiateViewController(withIdentifier: "threeQuestionsView")
-            } else if model.type == Categories.QuestionButtons {
-                controller = storyboard.instantiateViewController(withIdentifier: "questionsCollectionView")
+            } else if model.type == Categories.QuestionButtons && model.questions.count == 2 {
+                controller = storyboard.instantiateViewController(withIdentifier: "twoQuestionView")
             } else if model.type == Categories.YesNo {
                 controller = storyboard.instantiateViewController(withIdentifier: "staticYesNoView")
             } else if model.type == Categories.MiddleInfo {
@@ -291,13 +292,13 @@ extension MessagesViewController : CustomViewControllerDelegate {
             sendResponse(json!, process: process)
         }
     }
-    /*
+    
     func showNextStep(_ userIdentifier: UUID) {
         
         let c = context ?? Result(userIdentifier: userIdentifier, code: "")
         
         doNextStep(c)
-    }*/
+    }
     
     func showCurrentStep(_ userIdentifier: UUID, presentationStyle: MSMessagesAppPresentationStyle) {
         if let model = currentContext {
@@ -339,7 +340,11 @@ extension MessagesViewController {
     
     fileprivate func presentViewController(for conversation: MSConversation, with presentationStyle: MSMessagesAppPresentationStyle) {
         
+        // TODO: fix issue with the same apple id
         let userId = conversation.localParticipantIdentifier
+        let remote = conversation.remoteParticipantIdentifiers
+        print("local: \(userId); remote: \(remote)")
+        
         // Determine the controller to present.
         if presentationStyle == .compact {
 
@@ -470,9 +475,8 @@ extension MessagesViewController: ShowHistoryDelegate {
             print("requested history" + (history.gameIdentifier.uuidString))
         }
         else {
-            showCurrentStep(userIdentifier, presentationStyle: self.presentationStyle)
+            showNextStep(userIdentifier)
         }
-
     }
     
     func showMainPage(userIdentifier: UUID, isBack: Bool = false) {

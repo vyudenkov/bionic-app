@@ -44,21 +44,35 @@ extension Mirror {
     }
 }
 
+extension UIImage {
+
+    convenience init(view: UIView) {
+        UIGraphicsBeginImageContext(view.frame.size)
+        view.layer.render(in: UIGraphicsGetCurrentContext()!)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        self.init(cgImage: (image?.cgImage!)!)
+    }
+}
+
 extension UIImageView {
 
-    func showImage(imageUrl: String) {
+    func showImage(imageUrl: String, sync: Bool = false) {
         
         self.image = nil
-        /*if let url = URL(string: self.imageUrl), let data = try? Data(contentsOf: url) {
-         imageView.image = UIImage(data: data)
-         }*/
-        //imageView.image = URL(string: self.imageUrl).flatMap { try? Data(contentsOf: $0) }.flatMap{ UIImage(data: $0) }
-        // Suggested async image loading
-        if let url = URL(string: imageUrl) {
-            DispatchQueue.global().async {
-                let data = try? Data(contentsOf: url)
-                DispatchQueue.main.async {
-                    self.image = UIImage(data: data!)
+        
+        if sync {
+            if let url = URL(string: imageUrl), let data = try? Data(contentsOf: url) {
+                self.image = UIImage(data: data)
+            }
+        } else {
+            // Suggested async image loading
+            if let url = URL(string: imageUrl) {
+                DispatchQueue.global().async {
+                    let data = try? Data(contentsOf: url)
+                    DispatchQueue.main.async {
+                        self.image = UIImage(data: data!)
+                    }
                 }
             }
         }

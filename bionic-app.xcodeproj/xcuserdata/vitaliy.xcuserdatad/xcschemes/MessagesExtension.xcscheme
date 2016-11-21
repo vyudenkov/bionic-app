@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0800"
+   LastUpgradeVersion = "0810"
    wasCreatedForAppExtension = "YES"
    version = "2.0">
    <BuildAction
@@ -67,16 +67,26 @@
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES"
       launchAutomaticallySubstyle = "2">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <RemoteRunnable
+         runnableDebuggingMode = "1"
+         BundleIdentifier = "com.apple.MobileSMS">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "FE1848021DC7B54A00B6DAE2"
-            BuildableName = "bionic-app.app"
-            BlueprintName = "bionic-app"
+            BlueprintIdentifier = "FE18480C1DC7B54B00B6DAE2"
+            BuildableName = "MessagesExtension.appex"
+            BlueprintName = "MessagesExtension"
             ReferencedContainer = "container:bionic-app.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </RemoteRunnable>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "FE18480C1DC7B54B00B6DAE2"
+            BuildableName = "MessagesExtension.appex"
+            BlueprintName = "MessagesExtension"
+            ReferencedContainer = "container:bionic-app.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

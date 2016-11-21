@@ -57,19 +57,13 @@ class TextTableViewCell : UITableViewCell {
     }
 }
 
-class QuestionListViewController: BaseQuestionViewController, UITableViewDelegate, UITableViewDataSource {
+class QuestionListViewController: BaseQuestionViewController, ButtonClickDelegate, UITableViewDelegate, UITableViewDataSource {
 
     private var reusableCells: [ImageButtonTableViewCell] = []
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var lblTitle: UILabel!
 
-    @IBOutlet weak var btnNext: UIButton!
-    @IBAction func btnNextClick() {
-
-        super.next()
-    }
-    
     override func validate () -> Bool {
         return reusableCells.contains(where: { ( cell: ImageButtonTableViewCell ) -> Bool in return cell.imageButton.isSelected })
     }
@@ -83,15 +77,13 @@ class QuestionListViewController: BaseQuestionViewController, UITableViewDelegat
         preconditionFailure("The method must be overriden")
     }
     
+    func onClick(code: String?) {
+        super.next()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // prepare button
-        btnNext.layer.cornerRadius = 8
-        btnNext.layer.borderColor = UIColor.red.cgColor
-        btnNext.layer.masksToBounds = true
-        btnNext.setTitle(self.schema.buttons[0].text, for: UIControlState.normal)
-        
         // prepare header text
         lblTitle.text = self.schema.titles[0].text
         // Do any additional setup after loading the view.
@@ -123,16 +115,21 @@ class QuestionListViewController: BaseQuestionViewController, UITableViewDelegat
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2 * self.schema.questions.count
+        return 2 * self.schema.questions.count + 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let index = indexPath.row / 2
-        let question = self.schema.questions[index]
         
         var cell : UITableViewCell
-        if indexPath.row % 2 > 0 {
+        if indexPath.row == 2 * self.schema.questions.count {
+            cell = tableView.dequeueReusableCell(withIdentifier: "Button Cell", for: indexPath)
+            (cell as! ButtonTableViewCell).buttonTitle = self.schema.buttons[0].text
+            (cell as! ButtonTableViewCell).delegate = self
+
+        } else if indexPath.row % 2 > 0 {
+            let question = self.schema.questions[index]
             cell = tableView.dequeueReusableCell(withIdentifier: "Text Cell", for: indexPath)
             (cell as! TextTableViewCell).labelText = question.text
         }
@@ -148,6 +145,6 @@ class QuestionListViewController: BaseQuestionViewController, UITableViewDelegat
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50
+        return UITableViewAutomaticDimension
     }
 }

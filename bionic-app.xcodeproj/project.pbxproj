@@ -28,7 +28,7 @@
 		FE1848491DC7BBD600B6DAE2 /* FMKButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1848481DC7BBD600B6DAE2 /* FMKButton.swift */; };
 		FE18484B1DC7BC2E00B6DAE2 /* UrlSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE18484A1DC7BC2E00B6DAE2 /* UrlSettings.swift */; };
 		FE18484D1DC7C16500B6DAE2 /* ModelBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE18484C1DC7C16500B6DAE2 /* ModelBuilder.swift */; };
-		FE18484F1DC8A77000B6DAE2 /* QuestionCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE18484E1DC8A77000B6DAE2 /* QuestionCollectionViewController.swift */; };
+		FE18484F1DC8A77000B6DAE2 /* TwoQuestionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE18484E1DC8A77000B6DAE2 /* TwoQuestionViewController.swift */; };
 		FE1848511DC8B7FD00B6DAE2 /* BaseQuestionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1848501DC8B7FD00B6DAE2 /* BaseQuestionViewController.swift */; };
 		FE1D1C7D1DD5E3D0009D979F /* SelectProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1D1C7C1DD5E3D0009D979F /* SelectProductViewController.swift */; };
 		FE1D1C7F1DD61759009D979F /* MiddleInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1D1C7E1DD61759009D979F /* MiddleInfoViewController.swift */; };
@@ -36,6 +36,9 @@
 		FE1D1C831DD77BC5009D979F /* GameResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1D1C821DD77BC5009D979F /* GameResultViewController.swift */; };
 		FE2061E81DDCB3FA00009047 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE2061E71DDCB3FA00009047 /* Settings.swift */; };
 		FE2061EA1DDDBF1A00009047 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE2061E91DDDBF1A00009047 /* History.swift */; };
+		FE2061EC1DDF133000009047 /* BaseSelectionQuestionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE2061EB1DDF133000009047 /* BaseSelectionQuestionViewController.swift */; };
+		FE2061EE1DDF488000009047 /* MessageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FE2061ED1DDF488000009047 /* MessageView.xib */; };
+		FE2061F01DDF4A2800009047 /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE2061EF1DDF4A2800009047 /* MessageView.swift */; };
 		FE6E1CC01DCA2A7F00B55EBB /* ThreeQuestionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6E1CBF1DCA2A7F00B55EBB /* ThreeQuestionViewController.swift */; };
 		FE6E1CC21DCA3ADC00B55EBB /* StaticImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6E1CC11DCA3ADC00B55EBB /* StaticImageViewController.swift */; };
 		FE6E1CC61DD2205700B55EBB /* StaticImageYesNoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6E1CC51DD2205700B55EBB /* StaticImageYesNoViewController.swift */; };
@@ -93,7 +96,7 @@
 		FE1848481DC7BBD600B6DAE2 /* FMKButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMKButton.swift; sourceTree = "<group>"; };
 		FE18484A1DC7BC2E00B6DAE2 /* UrlSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UrlSettings.swift; sourceTree = "<group>"; };
 		FE18484C1DC7C16500B6DAE2 /* ModelBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelBuilder.swift; sourceTree = "<group>"; };
-		FE18484E1DC8A77000B6DAE2 /* QuestionCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuestionCollectionViewController.swift; sourceTree = "<group>"; };
+		FE18484E1DC8A77000B6DAE2 /* TwoQuestionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwoQuestionViewController.swift; sourceTree = "<group>"; };
 		FE1848501DC8B7FD00B6DAE2 /* BaseQuestionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseQuestionViewController.swift; sourceTree = "<group>"; };
 		FE1D1C7C1DD5E3D0009D979F /* SelectProductViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectProductViewController.swift; sourceTree = "<group>"; };
 		FE1D1C7E1DD61759009D979F /* MiddleInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MiddleInfoViewController.swift; sourceTree = "<group>"; };
@@ -101,6 +104,9 @@
 		FE1D1C821DD77BC5009D979F /* GameResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameResultViewController.swift; sourceTree = "<group>"; };
 		FE2061E71DDCB3FA00009047 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		FE2061E91DDDBF1A00009047 /* History.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = History.swift; sourceTree = "<group>"; };
+		FE2061EB1DDF133000009047 /* BaseSelectionQuestionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseSelectionQuestionViewController.swift; sourceTree = "<group>"; };
+		FE2061ED1DDF488000009047 /* MessageView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MessageView.xib; sourceTree = "<group>"; };
+		FE2061EF1DDF4A2800009047 /* MessageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
 		FE6E1CBF1DCA2A7F00B55EBB /* ThreeQuestionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreeQuestionViewController.swift; sourceTree = "<group>"; };
 		FE6E1CC11DCA3ADC00B55EBB /* StaticImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaticImageViewController.swift; sourceTree = "<group>"; };
 		FE6E1CC51DD2205700B55EBB /* StaticImageYesNoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaticImageYesNoViewController.swift; sourceTree = "<group>"; };
@@ -178,6 +184,8 @@
 			children = (
 				FE1848281DC7B7B300B6DAE2 /* GameCompactViewController.swift */,
 				FE18482A1DC7B7B300B6DAE2 /* RespondGameViewController.swift */,
+				FE2061ED1DDF488000009047 /* MessageView.xib */,
+				FE2061EF1DDF4A2800009047 /* MessageView.swift */,
 			);
 			name = Game;
 			sourceTree = "<group>";
@@ -215,8 +223,9 @@
 				FE1848461DC7BB8B00B6DAE2 /* ViewControllerConstructor.swift */,
 				FE18483C1DC7B97700B6DAE2 /* BaseViewController.swift */,
 				FE1848501DC8B7FD00B6DAE2 /* BaseQuestionViewController.swift */,
+				FE2061EB1DDF133000009047 /* BaseSelectionQuestionViewController.swift */,
 				FE1848361DC7B91800B6DAE2 /* QuestionListViewController.swift */,
-				FE18484E1DC8A77000B6DAE2 /* QuestionCollectionViewController.swift */,
+				FE18484E1DC8A77000B6DAE2 /* TwoQuestionViewController.swift */,
 				FE6E1CBF1DCA2A7F00B55EBB /* ThreeQuestionViewController.swift */,
 				FE6E1CC11DCA3ADC00B55EBB /* StaticImageViewController.swift */,
 				FE6E1CC51DD2205700B55EBB /* StaticImageYesNoViewController.swift */,
@@ -273,7 +282,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0800;
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = Vitaliy;
 				TargetAttributes = {
 					FE1848021DC7B54A00B6DAE2 = {
@@ -320,6 +329,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE2061EE1DDF488000009047 /* MessageView.xib in Resources */,
 				FE18481B1DC7B54B00B6DAE2 /* Assets.xcassets in Resources */,
 				FE1848191DC7B54B00B6DAE2 /* MainInterface.storyboard in Resources */,
 				FE1848391DC7B92B00B6DAE2 /* FMKButtons.xcassets in Resources */,
@@ -348,11 +358,13 @@
 				FE1D1C7F1DD61759009D979F /* MiddleInfoViewController.swift in Sources */,
 				FE18483D1DC7B97700B6DAE2 /* BaseViewController.swift in Sources */,
 				FE1848341DC7B8FE00B6DAE2 /* RadioButton.swift in Sources */,
-				FE18484F1DC8A77000B6DAE2 /* QuestionCollectionViewController.swift in Sources */,
+				FE18484F1DC8A77000B6DAE2 /* TwoQuestionViewController.swift in Sources */,
 				FE1848161DC7B54B00B6DAE2 /* MessagesViewController.swift in Sources */,
 				FE1848511DC8B7FD00B6DAE2 /* BaseQuestionViewController.swift in Sources */,
+				FE2061F01DDF4A2800009047 /* MessageView.swift in Sources */,
 				FE6E1CC61DD2205700B55EBB /* StaticImageYesNoViewController.swift in Sources */,
 				FE1848421DC7B9D700B6DAE2 /* Array+Serializable.swift in Sources */,
+				FE2061EC1DDF133000009047 /* BaseSelectionQuestionViewController.swift in Sources */,
 				FE1848471DC7BB8B00B6DAE2 /* ViewControllerConstructor.swift in Sources */,
 				FE18484D1DC7C16500B6DAE2 /* ModelBuilder.swift in Sources */,
 				FEFCBE601DD5C1F1002D290C /* Categories.swift in Sources */,
@@ -405,6 +417,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -454,6 +467,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
