@@ -1,29 +1,26 @@
 //
-//  StaticImageViewController.swift
+//  GameEndViewController.swift
 //  bionic-app
 //
-//  Created by Vitaliy on 11/2/16.
+//  Created by Vitaliy on 11/27/16.
 //  Copyright © 2016 Vitaliy. All rights reserved.
 //
 
 import UIKit
 
-class StaticImageViewController: BaseSchemaViewController {
+class GameEndViewController: BaseGameViewController {
 
-    @IBOutlet weak var lblTitle: UILabel!
-    
-    @IBOutlet weak var image: UIImageView!
     @IBOutlet weak var lblImageText: UILabel!
-    
-    @IBOutlet weak var btnNext: UIButton!
-    
-    @IBAction func btnNextClick() {
-        self.delegate.saveSchema(Result(userIdentifier: schema.userIdentifier, code: self.schema.code))
+    @IBOutlet weak var centerImage: UIImageView!
+    @IBAction func onClick() {
+        self.delegate.saveGame(FMKGame(type: self.schema.type, code: self.schema.code, userIdentifier: self.schema.userIdentifier, gameIdentifier: self.schema.gameIdentifier!))
     }
+    @IBOutlet weak var btnNext: UIButton!
+    @IBOutlet weak var lblTitle: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         // prepare button
         btnNext.layer.cornerRadius = 8
         btnNext.layer.borderColor = UIColor.red.cgColor
@@ -37,7 +34,8 @@ class StaticImageViewController: BaseSchemaViewController {
             let question = self.schema.titles[1]
             lblImageText.text = question.text
             lblImageText.sizeToFit()
-            image.showImage(imageUrl: question.imageUrl!)
+            centerImage.showImage(imageUrl: question.imageUrl!)
         }
+
     }
 }

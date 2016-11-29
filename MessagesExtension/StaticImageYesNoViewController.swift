@@ -8,16 +8,18 @@
 
 import UIKit
 
-class StaticImageYesNoViewController: BaseQuestionViewController {
+class StaticImageYesNoViewController: BaseSchemaViewController {
 
     @IBOutlet weak var btnNo: UIButton!
     @IBAction func btnNoClick() {
-        self.delegate.doNextStep(Result(userIdentifier: schema.userIdentifier, code: self.schema.code, selectionCode: self.schema.buttons[0].code))
+        let result = Result(userIdentifier: schema.userIdentifier, code: self.schema.code, selectionCode: self.schema.buttons[0].code)
+        self.delegate.saveSchema(result)
     }
     
     @IBOutlet weak var btnYes: UIButton!
     @IBAction func btnYesClick() {
-        self.delegate.doNextStep(Result(userIdentifier: schema.userIdentifier, code: self.schema.code, selectionCode: self.schema.buttons[1].code))
+        let result = Result(userIdentifier: schema.userIdentifier, code: self.schema.code, selectionCode: self.schema.buttons[1].code)
+        self.delegate.saveSchema(result)
     }
     
     @IBOutlet weak var lblTitle: UILabel!
@@ -43,13 +45,5 @@ class StaticImageYesNoViewController: BaseQuestionViewController {
         btnYes.layer.masksToBounds = true
         btnYes.setTitle(self.schema.buttons[1].text, for: UIControlState.normal)
         
-
-        // Do any additional setup after loading the view.
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-   
 }

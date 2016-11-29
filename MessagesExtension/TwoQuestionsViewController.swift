@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TwoQuestionsViewController: BaseQuestionViewController {
+class TwoQuestionsViewController: BaseSchemaViewController {
 
     @IBOutlet weak var lblTitle: UILabel!
     
@@ -29,7 +29,7 @@ class TwoQuestionsViewController: BaseQuestionViewController {
         return btnLeft.isSelected || btnRight.isSelected
     }
         
-    override func context () -> ExecutionContext {
+    override func context () -> Result {
         let code = btnLeft.isSelected ? self.schema.questions[0].code : self.schema.questions[1].code;
         
         return Result(userIdentifier: schema.userIdentifier, code: self.schema.code, selectionCode: code)

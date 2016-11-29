@@ -8,75 +8,6 @@
 
 import UIKit
 
-protocol ButtonCellDelegate: class {
-    func doClick()
-}
-
-
-class NextButtonTableViewCell : UITableViewCell {
-    
-    var delegate: ButtonCellDelegate!
-    
-    @IBOutlet weak var btnNext: UIButton!
-    @IBAction func onClick() {
-        delegate?.doClick()
-    }
-
-    var buttonText: String? = nil {
-        didSet {
-            self.btnNext.setTitle(buttonText, for: UIControlState.normal)
-        }
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        btnNext.contentMode = .scaleAspectFit
-        btnNext.layer.cornerRadius = 8
-        btnNext.layer.masksToBounds = true
-        
-        self.backgroundColor = UIColor.clear
-    }
-}
-
-class ImageResultTableViewCell : UITableViewCell {
-    
-    @IBOutlet weak var imageResult: UIImageView!
-    
-    var imageUrl: String? = nil {
-        didSet {
-            self.imageResult.showImage(imageUrl: imageUrl!)
-        }
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        imageResult.contentMode = .scaleAspectFit
-        imageResult.layer.cornerRadius = 8
-        imageResult.layer.masksToBounds = true
-        
-        self.backgroundColor = UIColor.clear
-    }
-}
-
-class TitleTableViewCell : UITableViewCell {
-    
-    @IBOutlet weak var lblTitle: UILabel!
-    var labelText: String? = nil {
-        didSet {
-            self.lblTitle.text = labelText
-            self.lblTitle.sizeToFit()
-        }
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        self.backgroundColor = UIColor.clear
-    }
-}
-
 class Section {
     
     var title: String
@@ -87,17 +18,22 @@ class Section {
     {
         self.title = title
     }
+    
+    init (title: String, images: [String])
+    {
+        self.title = title
+        self.images = images
+    }
 }
 
-class GameResultViewController: BaseSelectionQuestionViewController, ButtonCellDelegate, UITableViewDelegate, UITableViewDataSource {
+class GameResultViewController: BaseSchemaViewController, ButtonClickDelegate, UITableViewDelegate, UITableViewDataSource {
 
     var sections : [Section] = []
     
     @IBOutlet weak var tableView: UITableView!
     
-    func doClick() {
-        let result = Result(userIdentifier: self.schema.userIdentifier, code: self.schema.code)
-        self.delegate?.doNextStep(result)
+    func onClick(code: String?) {
+        self.delegate?.saveSchema(Result(userIdentifier: self.schema.userIdentifier, code: self.schema.code))
     }
     
     override func viewDidLoad() {
@@ -123,11 +59,6 @@ class GameResultViewController: BaseSelectionQuestionViewController, ButtonCellD
         tableView.delegate = self
         tableView.dataSource = self
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count + 1
@@ -147,19 +78,19 @@ class GameResultViewController: BaseSelectionQuestionViewController, ButtonCellD
         let section = indexPath.section
         
         if section == sections.count {
-            if let cell = tableView.dequeueReusableCell(withIdentifier: "Button Cell", for: indexPath) as? NextButtonTableViewCell {
+            if let cell = tableView.dequeueReusableCell(withIdentifier: "Button Cell", for: indexPath) as? ButtonTableViewCell {
                 cell.delegate = self
-                cell.buttonText = self.schema.buttons[0].text
+                cell.buttonTitle = self.schema.buttons[0].text
                 return cell
             }
         } else {
             let section = sections[section]
             if index == 0 {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "Title Cell", for: indexPath) as? TitleTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "Text Cell", for: indexPath) as? TextTableViewCell
                 cell?.labelText = section.title
                 return cell!
             } else {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "Image Result Cell", for: indexPath) as? ImageResultTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "Image Cell", for: indexPath) as? ImageTableViewCell
                 cell?.imageUrl = section.images[index - 1]
                 return cell!
             }
@@ -175,5 +106,4 @@ class GameResultViewController: BaseSelectionQuestionViewController, ButtonCellD
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableViewAutomaticDimension
     }
-
 }

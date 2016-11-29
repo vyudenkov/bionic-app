@@ -8,13 +8,14 @@
 
 import UIKit
 
-class MiddleInfoViewController: BaseQuestionViewController {
+class MiddleInfoViewController: BaseSchemaViewController {
 
     @IBOutlet weak var lblTitle: UILabel!
     
     @IBOutlet weak var btnMiddle: UIButton!
     @IBAction func onClick() {
-        delegate.doNextStep(Result(userIdentifier: self.schema.userIdentifier, code: self.schema.code))
+        let result = Result(userIdentifier: self.schema.userIdentifier, code: self.schema.code)
+        delegate.saveSchema(result)
     }
     
     @IBOutlet weak var lblImageText: UILabel!
@@ -42,12 +43,5 @@ class MiddleInfoViewController: BaseQuestionViewController {
          
         lblImageText.text = self.schema.buttons[0].text
         lblImageText.sizeToFit()
-        // Do any additional setup after loading the view.
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
 }

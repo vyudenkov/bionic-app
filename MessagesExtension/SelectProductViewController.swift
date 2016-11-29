@@ -8,57 +8,7 @@
 
 import UIKit
 
-class SelectProductTableViewCell : UITableViewCell {
-    
-    @IBOutlet weak var fmkImage: UIImageView!
-    
-    @IBOutlet weak var btnFuck: FMKRadioButton!
-    
-    @IBOutlet weak var btnMarry: FMKRadioButton!
-    
-    @IBOutlet weak var btnKill: FMKRadioButton!
-       
-    var gameImage: Element? = nil {
-        didSet {
-            fmkImage?.showImage(imageUrl: (gameImage?.imageUrl)!)
-        }
-    }
-    
-    func result() -> FMKGameItem? {
-        let result : String? = btnMarry.isSelected ? FMKGameItem.Marry : btnKill.isSelected ? FMKGameItem.Kill : btnFuck.isSelected ? FMKGameItem.Fuck : nil
-        if let res = result {
-            return FMKGameItem((gameImage?.code)!, imageUrl: (gameImage?.imageUrl)!, data: res)
-        }
-        return nil
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        btnFuck.alternateButton = [btnMarry, btnKill]
-        btnFuck.normalImage = #imageLiteral(resourceName: "FuckSmile")
-        btnFuck.selectedImage = #imageLiteral(resourceName: "FuckSmileSelected")
-        
-        btnKill.alternateButton = [btnMarry, btnFuck]
-        btnKill.normalImage = #imageLiteral(resourceName: "KillSmile")
-        btnKill.selectedImage = #imageLiteral(resourceName: "KillSmileSelected")
-        
-        btnMarry.alternateButton = [btnFuck, btnKill]
-        btnMarry.normalImage = #imageLiteral(resourceName: "MarrySmile")
-        btnMarry.selectedImage = #imageLiteral(resourceName: "MarrySmileSelected")
-        
-        fmkImage.autoresizingMask = [.flexibleTopMargin ]
-        fmkImage.contentMode = .scaleAspectFit
-        fmkImage.clipsToBounds = true
-        self.backgroundColor = UIColor.clear
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        //super.setSelected(selected, animated: animated)
-    }
-}
-
-class SelectProductViewController: BaseQuestionViewController, ButtonClickDelegate, UITableViewDelegate, UITableViewDataSource {
+class SelectProductViewController: BaseSchemaViewController, ButtonClickDelegate, UITableViewDelegate, UITableViewDataSource {
 
     private var reusableCells: [SelectProductTableViewCell] = []
     
@@ -74,8 +24,8 @@ class SelectProductViewController: BaseQuestionViewController, ButtonClickDelega
         }).count > 0
     }
     
-    override func context () -> ExecutionContext {
-        let result: FMKGame = FMKGame(userIdentifier: self.schema.userIdentifier, gameIdentifier: UUID(), title: nil, code: self.schema.code)
+    override func context () -> Result {
+        let result = Result(userIdentifier: self.schema.userIdentifier, code: self.schema.code)
         
         for cell in reusableCells {
             if let s = cell.result() {
@@ -86,7 +36,6 @@ class SelectProductViewController: BaseQuestionViewController, ButtonClickDelega
     }
     
     func onClick(code: String?) {
-        
         super.next()
     }
 

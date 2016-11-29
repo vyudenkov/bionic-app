@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:bionic-app.xcodeproj">
+      location = "self:/Users/vitaliy/Desktop/Projects/bionic/bionic-app/Next Level AI.xcodeproj">
    </FileRef>
 </Workspace>

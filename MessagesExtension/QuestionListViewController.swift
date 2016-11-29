@@ -8,56 +8,7 @@
 
 import UIKit
 
-class ImageButtonTableViewCell : UITableViewCell {
-    
-    @IBOutlet weak var imageButton: RadioButton!
-    
-    var code : String?
-    
-    var imageUrl: String? = nil {
-        didSet {
-            self.imageButton.showImage(imageUrl: imageUrl!)
-        }
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        imageButton.contentMode = .scaleAspectFit
-        imageButton.layer.cornerRadius = 8
-        imageButton.layer.masksToBounds = true
-
-        self.backgroundColor = UIColor.clear
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        //super.setSelected(selected, animated: animated)
-    }
-}
-
-class TextTableViewCell : UITableViewCell {
-    
-    @IBOutlet weak var imageText: UILabel!
-    
-    var labelText: String? = nil {
-        didSet {
-            self.imageText.text = labelText
-            self.imageText.sizeToFit()
-        }
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        self.backgroundColor = UIColor.clear
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        //super.setSelected(selected, animated: animated)
-    }
-}
-
-class QuestionListViewController: BaseQuestionViewController, ButtonClickDelegate, UITableViewDelegate, UITableViewDataSource {
+class QuestionListViewController: BaseSchemaViewController, ButtonClickDelegate, UITableViewDelegate, UITableViewDataSource {
 
     private var reusableCells: [ImageButtonTableViewCell] = []
     
@@ -68,7 +19,7 @@ class QuestionListViewController: BaseQuestionViewController, ButtonClickDelegat
         return reusableCells.contains(where: { ( cell: ImageButtonTableViewCell ) -> Bool in return cell.imageButton.isSelected })
     }
     
-    override func context () -> ExecutionContext {
+    override func context () -> Result {
         if let cell = reusableCells.first(where: { ( cell: ImageButtonTableViewCell ) -> Bool in return cell.imageButton.isSelected }) {
         
             return Result(userIdentifier: schema.userIdentifier, code: self.schema.code, selectionCode: cell.code!)

@@ -18,7 +18,7 @@
                BlueprintIdentifier = "FE18480C1DC7B54B00B6DAE2"
                BuildableName = "MessagesExtension.appex"
                BlueprintName = "MessagesExtension"
-               ReferencedContainer = "container:bionic-app.xcodeproj">
+               ReferencedContainer = "container:Next Level AI.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -30,9 +30,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "FE1848021DC7B54A00B6DAE2"
-               BuildableName = "bionic-app.app"
-               BlueprintName = "bionic-app"
-               ReferencedContainer = "container:bionic-app.xcodeproj">
+               BuildableName = "Next Level AI.app"
+               BlueprintName = "Next Level AI"
+               ReferencedContainer = "container:Next Level AI.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -50,7 +50,7 @@
             BlueprintIdentifier = "FE18480C1DC7B54B00B6DAE2"
             BuildableName = "MessagesExtension.appex"
             BlueprintName = "MessagesExtension"
-            ReferencedContainer = "container:bionic-app.xcodeproj">
+            ReferencedContainer = "container:Next Level AI.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -75,7 +75,7 @@
             BlueprintIdentifier = "FE18480C1DC7B54B00B6DAE2"
             BuildableName = "MessagesExtension.appex"
             BlueprintName = "MessagesExtension"
-            ReferencedContainer = "container:bionic-app.xcodeproj">
+            ReferencedContainer = "container:Next Level AI.xcodeproj">
          </BuildableReference>
       </RemoteRunnable>
       <MacroExpansion>
@@ -84,7 +84,7 @@
             BlueprintIdentifier = "FE18480C1DC7B54B00B6DAE2"
             BuildableName = "MessagesExtension.appex"
             BlueprintName = "MessagesExtension"
-            ReferencedContainer = "container:bionic-app.xcodeproj">
+            ReferencedContainer = "container:Next Level AI.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -102,9 +102,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "FE1848021DC7B54A00B6DAE2"
-            BuildableName = "bionic-app.app"
-            BlueprintName = "bionic-app"
-            ReferencedContainer = "container:bionic-app.xcodeproj">
+            BuildableName = "Next Level AI.app"
+            BlueprintName = "Next Level AI"
+            ReferencedContainer = "container:Next Level AI.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

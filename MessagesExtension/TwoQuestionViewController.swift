@@ -8,7 +8,7 @@
 
 import UIKit
 
-class QuestionCollectionViewCell : UICollectionViewCell {
+/*class QuestionCollectionViewCell : UICollectionViewCell {
 
     @IBOutlet weak var btnTitle: UILabel!
     
@@ -26,9 +26,9 @@ class QuestionCollectionViewCell : UICollectionViewCell {
         super.awakeFromNib()
         self.backgroundColor = UIColor.clear
     }
-}
+}*/
 
-class TwoQuestionViewController: BaseQuestionViewController {
+class TwoQuestionViewController: BaseSchemaViewController {
 
     var buttons: [RoundRadioButton] = []
     
@@ -48,7 +48,7 @@ class TwoQuestionViewController: BaseQuestionViewController {
         return buttons.contains(where: { ( cell: RoundRadioButton ) -> Bool in return cell.isSelected })
     }
     
-    override func context () -> ExecutionContext {
+    override func context () -> Result {
         let code = button1.isSelected ? self.schema.questions[0].code : self.schema.questions[1].code
         return Result(userIdentifier: schema.userIdentifier, code: self.schema.code, selectionCode: code)
     }

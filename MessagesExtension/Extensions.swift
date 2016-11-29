@@ -95,3 +95,11 @@ extension UIButton {
         }
     }
 }
+
+extension NSLayoutConstraint {
+
+    override open var description: String {
+        let id = identifier ?? ""
+        return "id: \(id), constant:\(constant)"
+    }
+}

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ThreeQuestionViewController: BaseQuestionViewController {
+class ThreeQuestionViewController: BaseSchemaViewController {
 
     var buttons: [RoundRadioButton] = []
     
@@ -31,7 +31,7 @@ class ThreeQuestionViewController: BaseQuestionViewController {
         return buttons.contains(where: { ( cell: RoundRadioButton ) -> Bool in return cell.isSelected })
     }
     
-    override func context () -> ExecutionContext {
+    override func context () -> Result {
         let code = button1.isSelected ? self.schema.questions[0].code : (
             button2.isSelected ? self.schema.questions[1].code : self.schema.questions[2].code
         )
@@ -64,6 +64,5 @@ class ThreeQuestionViewController: BaseQuestionViewController {
         button3.alternateButton = buttons
         button3Label.text = schema.questions[2].text
         button3Label.sizeToFit()
-
     }
 }

@@ -7,13 +7,14 @@
 //
 
 import UIKit
+import AVFoundation
 
 protocol RespondGameViewControllerDelegate: class {
     func respondGame(_ gameResponse: FMKGame)
 }
 
 class GameTableViewCell : UITableViewCell {
-    
+        var speechSyntesizer : AVSpeechSynthesizer = AVSpeechSynthesizer()
     @IBOutlet weak var fmkImage: UIImageView!
     
     @IBOutlet weak var btnFuck: FMKRadioButton!
@@ -22,7 +23,7 @@ class GameTableViewCell : UITableViewCell {
     
     @IBOutlet weak var fmkImageStiker: UIImageView!
     
-    var data: Element? = nil {
+    var data: FMKGameItem? = nil {
         didSet {
             fmkImage.showImage(imageUrl: data!.imageUrl!)
         }
@@ -63,10 +64,18 @@ class GameTableViewCell : UITableViewCell {
 
 extension GameTableViewCell: FMKRadioButtonDelegate {
     
+
+    
     func click(_ button: FMKRadioButton) {
         
         let sticker = button == btnFuck ? #imageLiteral(resourceName: "Fuck") : (button == btnMarry ? #imageLiteral(resourceName: "Marry") : #imageLiteral(resourceName: "Kill"))
         let stickerHighlighted = button == btnFuck ? #imageLiteral(resourceName: "FuckSelected") : (button == btnMarry ? #imageLiteral(resourceName: "MarrySelected") : #imageLiteral(resourceName: "KillSelected"))
+        
+        let speechUtterance = AVSpeechUtterance(string: "fuck")
+        speechUtterance.rate = 0.25
+        speechUtterance.pitchMultiplier = 0.25
+        speechUtterance.volume = 0.75
+        speechSyntesizer.speak(speechUtterance)
         
         fmkImageStiker.image = stickerHighlighted
         fmkImageStiker.animationImages = [sticker, stickerHighlighted, sticker, stickerHighlighted, sticker]
@@ -77,25 +86,23 @@ extension GameTableViewCell: FMKRadioButtonDelegate {
 }
 
 // View is show on the respondents side
-class RespondGameViewController: UIViewController, ButtonCellDelegate, UITableViewDelegate, UITableViewDataSource {
-
-    @IBOutlet weak var tableView: UITableView!
-    
-    weak var delegate: RespondGameViewControllerDelegate?
+class RespondGameViewController: BaseGameViewController, ButtonClickDelegate, UITableViewDelegate, UITableViewDataSource {
 
     private var reusableCells: [GameTableViewCell] = []
     
-    var result: FMKGame!
+    @IBOutlet weak var tableView: UITableView!
+    
+    var respondDelegate: RespondGameViewControllerDelegate?
 
-    func doClick() {
-        let result: FMKGame = FMKGame(userIdentifier: self.result.userIdentifier, gameIdentifier: self.result.gameIdentifier, title: self.result.title, code: self.result.code)
+    func onClick(code: String?) {
+        let result: FMKGame = FMKGame(type: Categories.GameResponse, code: self.schema.code, userIdentifier: self.schema.userIdentifier, gameIdentifier: self.schema.gameIdentifier!)
         
         for cell in reusableCells {
             if let s = cell.result() {
                 result.categories.append(FMKGameItem((cell.data?.code)!, imageUrl: (cell.data?.imageUrl)!, data: s.rawValue))
             }
         }
-        self.delegate?.respondGame(result)
+        self.respondDelegate?.respondGame(result)
     }
     
     override func viewDidLoad() {
@@ -104,27 +111,35 @@ class RespondGameViewController: UIViewController, ButtonCellDelegate, UITableVi
         tableView.delegate = self
         tableView.dataSource = self
         
-        for i in 0..<self.result.categories.count {
+        for i in 0..<self.schema.games.count {
             
             if let cell = tableView.dequeueReusableCell(withIdentifier: "Game Cell", for: IndexPath(row: i, section: 0)) as?GameTableViewCell {
                 
-                cell.data = self.result.categories[i] as? Element
+                cell.data = self.schema.games[i]
                 reusableCells.append(cell)
             }
         }
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.result.categories.count + 1
+        return self.schema.games.count + 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if indexPath.row == self.result.categories.count {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "Button Cell", for: indexPath) as! NextButtonTableViewCell
+        if indexPath.row == self.schema.games.count {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "Button Cell", for: indexPath) as! ButtonTableViewCell
             cell.delegate = self
             return cell
         }
         return reusableCells[indexPath.row]
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
     }
 }

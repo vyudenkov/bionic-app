@@ -8,47 +8,20 @@
 
 import UIKit
 
-protocol GameCompactSendMessageDelegate {
-    func startGame(_ controller: GameCompactViewController, game: FMKGame)
+protocol StartGameSendMessageDelegate {
+    func startGame(game: FMKGame)
 }
 
-class GameCompactViewCell : UITableViewCell {
+class StartGameViewController: BaseGameViewController, UITableViewDataSource, UITableViewDelegate {
     
-    @IBOutlet weak var imageButton: CheckRadioButton!
-    @IBOutlet weak var imageText: UIButton!
-    @IBAction func textClick() {
-        imageButton.toggleButton()
-        imageButton.unselectAlternateButtons()
-    }
-
-    var question: Element? = nil {
-        didSet {
-            self.imageText.setTitle(question!.text, for: UIControlState.normal)
-            self.imageText.sizeToFit()
-        }
-    }
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        self.backgroundColor = UIColor.clear
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        //super.setSelected(selected, animated: animated)
-    }
-}
-
-class GameCompactViewController: BaseSelectionQuestionViewController, UITableViewDataSource, UITableViewDelegate {
-    
-    private var reusableCells: [GameCompactViewCell] = []
+    private var reusableCells: [RadioButtonViewCell] = []
     
     @IBOutlet weak var btnNext: UIButton!
     
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var tableView: UITableView!
     
-    var sendMessageDelegate: GameCompactSendMessageDelegate?
+    var sendMessageDelegate: StartGameSendMessageDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,7 +42,7 @@ class GameCompactViewController: BaseSelectionQuestionViewController, UITableVie
         // imitialize radiobutton feature (single image selection)
         var buttons: [CheckRadioButton] = []
         for i in 0..<(schema?.questions.count ?? 0) {
-            if let cell = tableView?.dequeueReusableCell(withIdentifier: "gameCompactViewCell", for: IndexPath(row: i, section: 0)) as? GameCompactViewCell {
+            if let cell = tableView?.dequeueReusableCell(withIdentifier: "Radio Button Cell", for: IndexPath(row: i, section: 0)) as? RadioButtonViewCell {
                 cell.question = schema.questions[i]
                 let button = cell.imageButton
                 //button?.showImage(imageUrl: schema.questions[i].imageUrl)
@@ -87,21 +60,21 @@ class GameCompactViewController: BaseSelectionQuestionViewController, UITableVie
         super.next()
     }
     
-    override func doAction(context: ExecutionContext) {
+    override func doAction(context: FMKGame) {
 
-        sendMessageDelegate?.startGame(self, game: context as! FMKGame)
+        sendMessageDelegate?.startGame(game: context)
     }
     
     override func validate () -> Bool {
-        return reusableCells.contains(where: { ( cell: GameCompactViewCell ) -> Bool in return cell.imageButton.isSelected })
+        return reusableCells.contains(where: { ( cell: RadioButtonViewCell ) -> Bool in return cell.imageButton.isSelected })
     }
     
-    override func context () -> ExecutionContext {
-        if let cell = reusableCells.first(where: { ( cell: GameCompactViewCell ) -> Bool in return cell.imageButton.isSelected }) {
+    override func context () -> FMKGame {
+        if let cell = reusableCells.first(where: { ( cell: RadioButtonViewCell ) -> Bool in return cell.imageButton.isSelected }) {
             
-            let title = cell.question?.text
-            let result = FMKGame(userIdentifier: self.schema.userIdentifier, gameIdentifier: UUID(), title: title!, code: (cell.question?.code)!)
-            result.categories = self.selection;
+            let result = FMKGame(type: self.schema.type, code: self.schema.code, userIdentifier: self.schema.userIdentifier, gameIdentifier: UUID())
+            result.categories = self.schema.games;
+            result.categories.append(FMKGameInfo((cell.question?.code)!, title: (cell.question?.text)!))
             return result
         }
         

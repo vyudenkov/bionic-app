@@ -57,10 +57,23 @@ class Element : Category {
             return nil
         }
     }
+    
+    static func fromJson(json: Dictionary<String, Any>) -> Element? {
+        if let type = json["type"] as? String {
+            let code = json["code"] as? String ?? ""
+            let imageUrl = json["imageUrl"] as? String
+            let text = json["text"] as? String
+            return Element(type: type, code: code, text: text, imageUrl: imageUrl)
+        }
+        return nil
+    }
 }
 
 // abstract
 class Schema : Categories {
+    
+    var gameIdentifier: UUID?
+    var respondents : [String] = []
     
     var elements : [Element] {
         get {
@@ -96,29 +109,58 @@ class Schema : Categories {
         }
     }
 
-    init(type: String, code: String, isFullScreen: Bool, userIdentifier: UUID) {
+    var games : [FMKGameItem] {
+        get {
+            let items = categories.filter { (c: Category) -> Bool in return c.type == Category.FMKResult }
+            return items as! [FMKGameItem]
+        }
+    }
+    
+    func getMarryKill() -> [FMKGameItem] {
+        return self.categories
+            .filter { (c: Category) -> Bool in
+                if let g = c as? FMKGameItem, let r = g.data {
+                    return r == FMKGameItem.Fuck || r == FMKGameItem.Marry
+                }
+                return false
+            } as! [FMKGameItem]
+    }
+    
+    init(type: String, code: String, isFullScreen: Bool, userIdentifier: UUID, gameIdentifier: UUID?) {
         
+        self.gameIdentifier = gameIdentifier
         super.init(code: code, type: type, isFullScreen: isFullScreen, userIdentifier: userIdentifier)
+    }
+    
+    
+    func toResult() -> FMKGame {
+        let result = FMKGame(type: self.type, code: self.code, userIdentifier: self.userIdentifier, gameIdentifier: self.gameIdentifier!)
+        return result
     }
     
     static func fromJson(json: Dictionary<String, Any>) -> Schema {
         
         let userIdentifier = UUID(uuidString: (json["userIdentifier"] as? String)!)
-        let type = json["type"] as? String
-        let code = json["code"] as? String
+        var gameIdentifier : UUID? = nil
+        if let g = json["gameIdentifier"] as? String { gameIdentifier = UUID(uuidString: g)}
+        
+        let type = json["type"] as! String
+        let code = json["code"] as! String
         
         let isFullScreen = json["isFullScreen"] as? String ?? "true" == "true"
+        let result = Schema(type: type, code: code, isFullScreen: isFullScreen, userIdentifier: userIdentifier!, gameIdentifier: gameIdentifier)
         
-        let result = Schema(type: type!, code: code!, isFullScreen: isFullScreen, userIdentifier: userIdentifier!)
+        if let respondents = json["respondents"] as? [String] {
+            result.respondents = respondents
+        }
         
         if let categories = json["categories"] as? [Dictionary<String, Any>] {
             for category in categories {
-                let code = category["code"] as? String ?? ""
-                let type = category["type"] as! String
-                let text = category["text"] as? String
-                let imageUrl = category["imageUrl"] as? String
-            
-                result.categories.append(Element(type: type, code: code, text: text, imageUrl: imageUrl))
+                if let type = category["type"] as? String, type != Category.FMKResult {
+                    result.categories.append(Element.fromJson(json: category)!)
+                } else {
+                    result.categories.append(FMKGameItem.fromJson(json: category)!)
+                }
             }
         }
         return result

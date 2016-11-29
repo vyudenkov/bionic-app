@@ -1,3 +1,4 @@
+
 //
 //  MessagesViewController.swift
 //  MessagesExtension
@@ -17,17 +18,15 @@ extension MSMessage {
     }
 }
 
-protocol CustomViewControllerDelegate: class {
-    func doNextStep(_ response: ExecutionContext)
-}
-
 class MessagesViewController: MSMessagesAppViewController {
 
     let serverUrl = "http://192.168.8.238:1337"
     
-    var context: ExecutionContext? = nil
+    var currentResult: Result? = nil
 
     var currentContext: Categories? = nil
+    
+    var gameIdentifier: UUID? = nil
     
     var selection: [FMKGameItem] = []
     
@@ -56,21 +55,35 @@ class MessagesViewController: MSMessagesAppViewController {
         addChildViewController(controller)
         
         controller.view.frame = view.bounds
-        controller.view.translatesAutoresizingMaskIntoConstraints = false
+        controller.view.translatesAutoresizingMaskIntoConstraints = true
         view.addSubview(controller.view)
         
-        controller.view.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        controller.view.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        let c1 = controller.view.leftAnchor.constraint(equalTo: view.leftAnchor)
+        c1.identifier = "leftAnchor"
+        c1.isActive = true
         
-        controller.view.topAnchor.constraint(equalTo: self.topLayoutGuide.bottomAnchor).isActive = true
+        let c2 = controller.view.rightAnchor.constraint(equalTo: view.rightAnchor)
+        c2.identifier = "rightAnchor"
+        c2.isActive = true
         
-        //guard let presentationStyle = .activePresentationStyle else { fatalError("error") }
-        //if presentationStyle == .compacts {
-        //    controller.view.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        //}
-        //else {
-        controller.view.bottomAnchor.constraint(equalTo: self.bottomLayoutGuide.topAnchor).isActive = true
-        //}
+        if self.presentationStyle == MSMessagesAppPresentationStyle.compact {
+            let c3 = controller.view.topAnchor.constraint(equalTo: view.topAnchor)
+            c3.identifier = "myTopAnchor compact"
+            c3.isActive = true
+            
+            let c4 = controller.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            c4.identifier = "myBottomAnchor compact"
+            c4.isActive = true
+        }
+        else {
+            let c3 = controller.view.topAnchor.constraint(equalTo: self.topLayoutGuide.bottomAnchor, constant: 86)
+            c3.identifier = "myTopAnchor expanded"
+            c3.isActive = true
+            
+            let c4 = controller.view.bottomAnchor.constraint(equalTo: self.bottomLayoutGuide.topAnchor, constant: 60)
+            c4.identifier = "myBottomAnchor expanded"
+            c4.isActive = true
+        }
         
         controller.didMove(toParentViewController: self)
         
@@ -112,12 +125,11 @@ class MessagesViewController: MSMessagesAppViewController {
         print("didStartSending")
         print(conversation.remoteParticipantIdentifiers)
         
-        let game = FMKGame(message: message)
-        
+        let game = FMKGame(message: message, isOriginal: false)
         if let exist = game {
             exist.userIdentifier = conversation.localParticipantIdentifier
             exist.respondents = conversation.remoteParticipantIdentifiers.map { $0.uuidString }
-            sendStartGame(game: exist)
+            saveGame(exist)
         }
     }
     
@@ -133,35 +145,111 @@ class MessagesViewController: MSMessagesAppViewController {
         
         // Use this method to prepare for the change in presentation style.
         
-        guard let conversation = activeConversation else { fatalError("Expected a conversation") }
-        
-        presentViewController(for: conversation, with: presentationStyle)
+
     }
     
     override func didTransition(to presentationStyle: MSMessagesAppPresentationStyle) {
         // Called after the extension transitions to a new presentation style.
         
         // Use this method to finalize any behaviors associated with the change in presentation style.
+        guard let conversation = activeConversation else { fatalError("Expected a conversation") }
+        
+        presentViewController(for: conversation, with: presentationStyle)
     }
 }
 
+// Send game to server - new game or game response
+extension MessagesViewController : SaveGameDelegate {
+    
+    func saveGame(_ game: FMKGame, process: @escaping (Dictionary<String, Any>) -> Void) {
+        
+        let requestURL = URL(string: "\(serverUrl)/game")
+        var request = URLRequest(url: requestURL!)
+        request.httpMethod = "POST"
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        request.httpBody = game.toJson()
+        
+        print("=== Request Game (POST): " + (requestURL?.absoluteString)!)
+        
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
+            (data, response, error) -> Void in
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                if (httpResponse.statusCode == 200) {
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.allowFragments) as! Dictionary<String, Any>
+                        process(json)
+                    } catch {
+                        print("!!!Error")
+                    }
+                } else {
+                    print("!!!Incorrect status code: \(httpResponse.statusCode) - " + httpResponse.statusCode.description)
+                }
+            } else {
+                print("!!!Response is null: " + error.debugDescription)
+            }
+        })
+        task.resume()
+    }
+    
+    // Method is called ONLY for selected game in history
+    func loadGame(_ gameId: UUID) {
+        
+        let requestURL = URL(string: "\(Settings.serverPath)/game/\(gameId.uuidString)")
+        var request = URLRequest(url: requestURL!)
+        request.httpMethod = "GET"
+        
+        print("=== Request Game (GET): " + (requestURL?.absoluteString)!)
+        
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
+            (data, response, error) -> Void in
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                if (httpResponse.statusCode == 200) {
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.allowFragments) as! Dictionary<String, Any>
+                        self.process(json: json)
+                    } catch {
+                        print("Error")
+                    }
+                } else {
+                    print("!!!Incorrect status code: \(httpResponse.statusCode) - " + httpResponse.statusCode.description)
+                }
+            } else {
+                print("!!!Response is null: " + error.debugDescription)
+            }
+        })
+        task.resume()
+    }
+
+    // Save game to server
+    func saveGame(_ game: FMKGame) {
+        
+        // response from recepients
+        if game.type == Categories.GameStart {
+            saveGame(game, process: { _ in print("!!!Game sent") })
+        } else if game.type == Categories.GameResponse {
+            saveGame(game, process: { _ in print("!!!Game response sent") })
+        } else if game.type == Categories.GameEnd {
+            requestPresentationStyle(MSMessagesAppPresentationStyle.compact)
+        } else {
+            saveGame(game, process: process)
+        }
+    }
+}
 
 // Navigation
-extension MessagesViewController : CustomViewControllerDelegate {
-
+extension MessagesViewController : SaveResponseControllerDelegate {
     
     func process(model: Categories) {
         self.currentContext = model
         
+        let storyboard: UIStoryboard = UIStoryboard(name: "MainInterface", bundle: nil)
+        
         if let model = model as? Schema {
-            let storyboard: UIStoryboard = UIStoryboard(name: "MainInterface", bundle: nil)
             
             var controller: UIViewController? = nil
-            if model.type == Categories.Game {
-                controller = storyboard.instantiateViewController(withIdentifier: "compactGameView")
-                (controller as! GameCompactViewController).sendMessageDelegate = self
-                (controller as! GameCompactViewController).selection = self.selection
-            } else if model.type == Categories.QuestionList {
+            if model.type == Categories.QuestionList {
                 controller = storyboard.instantiateViewController(withIdentifier: "questionsListView")
             } else if model.type == Categories.Info {
                 controller = storyboard.instantiateViewController(withIdentifier: "staticCollectionView")
@@ -175,13 +263,28 @@ extension MessagesViewController : CustomViewControllerDelegate {
                 controller = storyboard.instantiateViewController(withIdentifier: "middleInfoView")
             } else if model.type == Categories.TwoQuestion {
                 controller = storyboard.instantiateViewController(withIdentifier: "twoQuestionsView")
-            } else if model.type == Categories.GameResult {
-                controller = storyboard.instantiateViewController(withIdentifier: "gameResultView")
             } else if model.type == Categories.GameSelection {
                 controller = storyboard.instantiateViewController(withIdentifier: "selectProductView")
+            } else if model.type == Categories.GameSelectionResult {
+                controller = storyboard.instantiateViewController(withIdentifier: "gameResultView")
+            } else if model.type == Categories.GameStart {
+                controller = storyboard.instantiateViewController(withIdentifier: "startGameView")
+                (controller as! StartGameViewController).sendMessageDelegate = self
+            } else if model.type == Categories.GameResponse {
+                controller = storyboard.instantiateViewController(withIdentifier: "respondGameView")
+            } else if model.type == Categories.GameProductResult {
+                controller = storyboard.instantiateViewController(withIdentifier: "productResultView")
+            } else if model.type == Categories.GameFulfilment {
+                controller = storyboard.instantiateViewController(withIdentifier: "fulfilmentView")
+            } else if model.type == Categories.GameEnd {
+                controller = storyboard.instantiateViewController(withIdentifier: "gameEndView")
             }
             
-            if let c = controller as? BaseQuestionViewController {
+            if let c = controller as? BaseSchemaViewController {
+                c.delegate = self
+                c.schema = model
+                showControler(controller: c)
+            } else if let c = controller as? BaseGameViewController {
                 c.delegate = self
                 c.schema = model
                 showControler(controller: c)
@@ -189,7 +292,7 @@ extension MessagesViewController : CustomViewControllerDelegate {
                 print("Visualization type: \(model.type)")
                 fatalError("Undefined case for question controller")
             }
-        }
+        } 
     }
     
     func process(json: Dictionary<String, Any>) {
@@ -248,56 +351,18 @@ extension MessagesViewController : CustomViewControllerDelegate {
         task.resume()
     }
     
-   /* func getCurrentStep(_ gameId: UUID, process: @escaping (Dictionary<String, Any>) -> Void) {
+    internal func saveSchema(_ response: Result) {
+        print("Next step: ")
+        self.currentResult = response
         
-        let requestURL = URL(string: "\(serverUrl)/workflow/\(gameId.uuidString)")
-        
-        print("=== Request: " + (requestURL?.absoluteString)!)
-        
-        let task = URLSession.shared.dataTask(with: requestURL!, completionHandler: {
-            (data, response, error) -> Void in
-            
-            if let httpResponse = response as? HTTPURLResponse {
-                if (httpResponse.statusCode == 200) {
-                    do {
-                        let json = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.allowFragments) as! Dictionary<String, Any>
-                        process(json)
-                    } catch {
-                        print("Error")
-                    }
-                }
-            } else {
-                print("Response is null: " + error.debugDescription)
-            }
-            
-        })
-        task.resume()
-    }*/
-
-    
-    internal func doNextStep(_ response: ExecutionContext) {
-        if let result = response as? Serializable {
-            
-            print("Next step: ")
-            self.context = response
-            
-            if let selection = result as? FMKGame {
-                self.selection = selection.getMarryKill()
-                print("Selection stored: ")
-            }
-           
-            let json = result.toJson(prettyPrinted: false)
-//            let text = String(data: json!, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))
-//            print(text!)
-            sendResponse(json!, process: process)
-        }
+        let json = response.toJson(prettyPrinted: false)
+        sendResponse(json!, process: process)
     }
     
     func showNextStep(_ userIdentifier: UUID) {
         
-        let c = context ?? Result(userIdentifier: userIdentifier, code: "")
-        
-        doNextStep(c)
+        let c = currentResult ?? Result(userIdentifier: userIdentifier, code: "")
+        saveSchema(c)
     }
     
     func showCurrentStep(_ userIdentifier: UUID, presentationStyle: MSMessagesAppPresentationStyle) {
@@ -309,14 +374,17 @@ extension MessagesViewController : CustomViewControllerDelegate {
             } else if !model.isFullScreen && presentationStyle == .compact {
                 print ("========= Show current step COMPACT: \(model.code)")
                 process(model: model)
-            }
-            else {
+            } else {
                 print ("========= Show main page")
                 showMainPage(userIdentifier: userIdentifier, isBack: true)
+                self.gameIdentifier = nil
+                self.currentContext = nil
             }
         } else {
             print ("========= Show main page")
             showMainPage(userIdentifier: userIdentifier)
+            self.gameIdentifier = nil
+            self.currentContext = nil
         }
     }
 }
@@ -325,14 +393,17 @@ extension MessagesViewController : CustomViewControllerDelegate {
 // Game
 extension MessagesViewController {
 
-
+    // opens game for recepient
     func showGame(with: FMKGame) {
         let storyboard: UIStoryboard = UIStoryboard(name: "MainInterface", bundle: nil)
         
         let controller: RespondGameViewController = storyboard.instantiateViewController(withIdentifier: "gameView") as! RespondGameViewController
         
+        let schema = Schema(type: with.type, code: with.code, isFullScreen: true, userIdentifier: with.userIdentifier, gameIdentifier: with.gameIdentifier)
+        schema.categories = with.categories
         controller.delegate = self
-        controller.result = with
+        controller.respondDelegate = self
+        controller.schema = schema
         
         showControler(controller: controller)
     }
@@ -352,10 +423,12 @@ extension MessagesViewController {
         }
         else {
             // Url assigned to message means that it is a game with respondents
-            let game = FMKGame(message: conversation.selectedMessage)
+            let game = FMKGame(message: conversation.selectedMessage, isOriginal: true)
             
             if let exist = game {
                 showGame(with: exist)
+            } else if let id = self.gameIdentifier {
+                loadGame(id)
             } else {
                 showCurrentStep(userId, presentationStyle: presentationStyle)
             }
@@ -363,36 +436,44 @@ extension MessagesViewController {
     }
 }
 
-extension MessagesViewController: GameCompactSendMessageDelegate {
+
+extension MessagesViewController: ShowHistoryDelegate {
     
-    // Save game to server
-    func sendStartGame(game: FMKGame) {
+    // Ratings are assigned by respondent
+    func showHistory(userIdentifier: UUID, item: HistoryItem?) {
         
-        let requestURL = URL(string: "\(serverUrl)/game")
-        var request = URLRequest(url: requestURL!)
-        request.httpMethod = "POST"
-        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
-        request.httpBody = game.toJson()
-        
-        print("=== Request Game (POST): " + (requestURL?.absoluteString)!)
-        
-        let task = URLSession.shared.dataTask(with: request, completionHandler: {
-            (data, response, error) -> Void in
-            
-            if let httpResponse = response as? HTTPURLResponse {
-                if (httpResponse.statusCode == 200) {
-                    print("!!!Game started")
-                } else {
-                    print("!!!Incorrect status code: \(httpResponse.statusCode) - " + httpResponse.statusCode.description)
-                }
+        if let history = item {
+            self.gameIdentifier = history.gameIdentifier
+            if self.presentationStyle == .compact {
+                self.requestPresentationStyle(.expanded)
             } else {
-                print("!!!Response is null: " + error.debugDescription)
+                print("Requested history" + (history.gameIdentifier.uuidString))
+                self.loadGame(history.gameIdentifier)
             }
-        })
-        task.resume()
+        }
+        else {
+            showNextStep(userIdentifier)
+        }
     }
     
     
+    func showMainPage(userIdentifier: UUID, isBack: Bool = false) {
+        let storyboard: UIStoryboard = UIStoryboard(name: "MainInterface", bundle: nil)
+        
+        let controller: MainPageViewController = storyboard.instantiateViewController(withIdentifier: "mainPageView") as! MainPageViewController
+        
+        controller.delegate = self
+        controller.userIdentifier = userIdentifier
+        controller.buttonTitle = isBack ? "Continue" : "Select Products"
+        controller.fullScreen = self.presentationStyle == .expanded
+        showControler(controller: controller)
+    }
+}
+
+
+// Send selection (Game) to respondents
+extension MessagesViewController: StartGameSendMessageDelegate {
+   
     fileprivate func composeMessage(with game: FMKGame, caption: String, session: MSSession? = nil) -> MSMessage {
         var components = URLComponents()
         components.queryItems = game.queryItems
@@ -408,10 +489,10 @@ extension MessagesViewController: GameCompactSendMessageDelegate {
         return message
     }
    
-    func startGame(_ controller: GameCompactViewController, game: FMKGame) {
+    func startGame(game: FMKGame) {
         guard let conversation = activeConversation else { fatalError("Expected a conversation") }
         
-        let messageCaption = NSLocalizedString(game.title!, comment: "")
+        let messageCaption = NSLocalizedString((game.gameInfo?.title!)!, comment: "")
         
         let message = composeMessage(with: game, caption: messageCaption, session: conversation.selectedMessage?.session)
         
@@ -423,25 +504,34 @@ extension MessagesViewController: GameCompactSendMessageDelegate {
         
         dismiss()
     }
-
 }
 
-extension MessagesViewController: RespondGameViewControllerDelegate {
+// Send response to the Game
+extension MessagesViewController : RespondGameViewControllerDelegate {
     
-    fileprivate func composeMessage(with responses: RespondentResponses, caption: String, session: MSSession? = nil) -> MSMessage {
-        let components = URLComponents()
-        //components.queryItems = game.queryItems
-        
-        let layout = MSMessageTemplateLayout()
-        layout.image = #imageLiteral(resourceName: "MessageImage")
-        layout.caption = caption
-        
-        let message = MSMessage(session: session ?? MSSession())
-        message.url = components.url!
-        message.layout = layout
-        message.summaryText = caption
-        
-        return message
+    fileprivate func composeMessage(with game: FMKGame, caption: String, message: MSMessage? = nil) -> MSMessage {
+        if let exist = FMKGame(message: message, isOriginal: true) {
+            
+            var queryItems = exist.queryItems
+            let response = URLQueryItem(name: "response", value: game.toJsonString()?.toBase64())
+            queryItems.append(response)
+            
+            var components = URLComponents()
+            components.queryItems = queryItems
+            
+            let layout = MSMessageTemplateLayout()
+            layout.image = exist.render()
+            layout.caption = caption
+            
+            let message = MSMessage(session: message?.session ?? MSSession())
+            message.url = components.url!
+            message.layout = layout
+            
+            return message
+        }
+        else {
+            return composeMessage(with: game, caption: caption, session: nil)
+        }
     }
     
     // Ratings are assigned by respondent
@@ -452,7 +542,7 @@ extension MessagesViewController: RespondGameViewControllerDelegate {
         
         let messageCaption = NSLocalizedString("I've rated: $\(conversation.localParticipantIdentifier.uuidString)", comment: "")
         
-        let message = composeMessage(with: gameResponse, caption: messageCaption, session: conversation.selectedMessage?.session)
+        let message = composeMessage(with: gameResponse, caption: messageCaption, message: conversation.selectedMessage)
         
         // Add the message to the conversation.
         conversation.insert(message) { error in
@@ -466,28 +556,4 @@ extension MessagesViewController: RespondGameViewControllerDelegate {
 }
 
 
-extension MessagesViewController: ShowHistoryDelegate {
-    
-    // Ratings are assigned by respondent
-    func showHistory(userIdentifier: UUID, item: HistoryItem?) {
-        
-        if let history = item {
-            print("requested history" + (history.gameIdentifier.uuidString))
-        }
-        else {
-            showNextStep(userIdentifier)
-        }
-    }
-    
-    func showMainPage(userIdentifier: UUID, isBack: Bool = false) {
-        let storyboard: UIStoryboard = UIStoryboard(name: "MainInterface", bundle: nil)
-        
-        let controller: MainPageViewController = storyboard.instantiateViewController(withIdentifier: "mainPageView") as! MainPageViewController
-        
-        controller.delegate = self
-        controller.userIdentifier = userIdentifier
-        controller.buttonTitle = isBack ? "Continue" : "Select Products"
-        showControler(controller: controller)
-    }
-}
 

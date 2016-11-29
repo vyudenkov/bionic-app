@@ -17,36 +17,6 @@ protocol DeleteHistoryDelegate {
     func clearAssessment()
 }
 
-protocol ButtonClickDelegate {
-    func onClick(code: String?)
-}
-
-class ButtonTableViewCell : UITableViewCell {
-    
-    var delegate : ButtonClickDelegate?
-    var code: String?
-    var buttonTitle: String? = nil {
-        didSet {
-            startButton.setTitle(buttonTitle, for: UIControlState.normal)
-        }
-    }
-    
-    @IBOutlet weak var startButton: UIButton!
-    @IBAction func onClick() {
-        delegate?.onClick(code: code)
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        startButton.layer.cornerRadius = 8
-
-        startButton.layer.borderColor = UIColor.red.cgColor
-        startButton.layer.masksToBounds = true
-        
-        self.backgroundColor = UIColor.clear
-    }
-}
 
 class HistoryItemCollectionViewCell : UICollectionViewCell {
     
@@ -69,12 +39,19 @@ class HistoryItemTableViewCell : UITableViewCell, UICollectionViewDataSource, UI
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var lblPercent: UILabel!
     
+    @IBOutlet weak var btnDelete: UIButton!
     @IBAction func onClose() {
         deleteDelegate?.deleteHistory(item: historyItem!)
     }
     
+    func itemTought(_ sender: UITapGestureRecognizer) {
+        delegate?.showHistory(userIdentifier: userIdentifier, item: historyItem)
+    }
+    
     var delegate : ShowHistoryDelegate?
     var deleteDelegate : DeleteHistoryDelegate?
+    
+    var userIdentifier : UUID!
     
     var historyItem: HistoryItem? = nil {
         didSet {
@@ -84,6 +61,12 @@ class HistoryItemTableViewCell : UITableViewCell, UICollectionViewDataSource, UI
             lblTitle.text = historyItem?.title
             lblTitle.sizeToFit()
             imagesList.reloadData()
+        }
+    }
+    
+    var fullScreen: Bool? = nil {
+        didSet {
+            btnDelete.isHidden = fullScreen!
         }
     }
     
@@ -107,10 +90,12 @@ class HistoryItemTableViewCell : UITableViewCell, UICollectionViewDataSource, UI
     }
 }
 
-class MainPageViewController: UIViewController, ButtonClickDelegate, DeleteHistoryDelegate, UITableViewDelegate, UITableViewDataSource {
+class MainPageViewController: BaseViewController, ButtonClickDelegate, DeleteHistoryDelegate, UITableViewDelegate, UITableViewDataSource {
     
     internal func deleteHistory(item: HistoryItem?) {
-        self.delete(gameId: (item?.gameIdentifier)!)
+        self.showYesNoQuestions(message: "Delete... REALY???", action: {() in
+            self.delete(gameId: (item?.gameIdentifier)!)
+        });
     }
     
     internal func onClick(code: String?) {
@@ -120,7 +105,7 @@ class MainPageViewController: UIViewController, ButtonClickDelegate, DeleteHisto
             clearAssessment()
         }
     }
-
+    
     @IBOutlet weak var tableView: UITableView!
     
     var delegate: ShowHistoryDelegate!
@@ -128,6 +113,10 @@ class MainPageViewController: UIViewController, ButtonClickDelegate, DeleteHisto
     var historyItems : [HistoryItem] = []
  
     var userIdentifier : UUID!
+    
+    var assessment : Bool! = false
+    
+    var fullScreen : Bool! = false
     
     var buttonTitle : String!
     
@@ -141,32 +130,36 @@ class MainPageViewController: UIViewController, ButtonClickDelegate, DeleteHisto
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1 + self.historyItems.count + (self.historyItems.count == 0 ? 0 : 1)
+        return 1 + self.historyItems.count + (self.assessment == true ? 1 : 0)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let index = indexPath.row
         
-        var cell : UITableViewCell
         if indexPath.row == 0 {
-            cell = tableView.dequeueReusableCell(withIdentifier: "Button Cell", for: indexPath)
-            (cell as! ButtonTableViewCell).delegate = self
-            (cell as! ButtonTableViewCell).code = "1"
-            (cell as! ButtonTableViewCell).buttonTitle = self.buttonTitle
+            let cell = tableView.dequeueReusableCell(withIdentifier: "Button Cell", for: indexPath) as! ButtonTableViewCell
+            cell.delegate = self
+            cell.code = "1"
+            cell.buttonTitle = self.buttonTitle
+            return cell
         } else if indexPath.row == self.historyItems.count + 1 {
-            cell = tableView.dequeueReusableCell(withIdentifier: "Button Cell", for: indexPath)
-            (cell as! ButtonTableViewCell).delegate = self
-            (cell as! ButtonTableViewCell).code = "2"
-            (cell as! ButtonTableViewCell).buttonTitle = "Back To Assessment"
+            let cell = tableView.dequeueReusableCell(withIdentifier: "Button Cell", for: indexPath) as! ButtonTableViewCell
+            cell.delegate = self
+            cell.code = "2"
+            cell.buttonTitle = "Back To Assessment"
+            return cell
         } else {
-            cell = tableView.dequeueReusableCell(withIdentifier: "History Cell", for: indexPath)
-            (cell as! HistoryItemTableViewCell).delegate = self.delegate
-            (cell as! HistoryItemTableViewCell).deleteDelegate = self
-            (cell as! HistoryItemTableViewCell).historyItem = self.historyItems[index - 1]
+            let cell = tableView.dequeueReusableCell(withIdentifier: "History Cell", for: indexPath) as! HistoryItemTableViewCell
+            cell.delegate = self.delegate
+            cell.deleteDelegate = self
+            cell.fullScreen = self.fullScreen
+            cell.historyItem = self.historyItems[index - 1]
+            cell.userIdentifier = self.userIdentifier
+            let gesture = UITapGestureRecognizer(target: cell, action: #selector(HistoryItemTableViewCell.itemTought(_:)))
+            cell.addGestureRecognizer(gesture)
+            return cell
         }
-        
-        return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -180,8 +173,35 @@ class MainPageViewController: UIViewController, ButtonClickDelegate, DeleteHisto
         return UITableViewAutomaticDimension
     }
     
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let delete = UITableViewRowAction(style: .normal, title: "Delete") { action, index in
+            print("delete")
+            let i = index.row
+            self.deleteHistory(item: self.historyItems[i - 1])
+        }
+        delete.backgroundColor = UIColor.orange
+        
+        let edit = UITableViewRowAction(style: .normal, title: "Edit") { action, index in
+            print("edit")
+            let i = index.row
+            self.delegate.showHistory(userIdentifier: self.userIdentifier, item: self.historyItems[i - 1])
+        }
+        return [edit, delete]
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    private func tableView(_ tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle) {
+        print("Do something")
+    }
+    
     func process(json: Dictionary<String, Any>) {
         self.historyItems = []
+        if let hasAssessment = json["assessment"] as? Bool {
+            self.assessment = hasAssessment
+        }
         if let items = json["items"] as? [Dictionary<String, Any>] {
            for item in items {
                let gameIdentifier = UUID(uuidString: (item["gameIdentifier"] as? String)!)!
